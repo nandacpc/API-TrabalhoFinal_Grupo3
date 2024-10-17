@@ -3,9 +3,12 @@ package org.serratec.shablau.model;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Pedido {
@@ -15,8 +18,11 @@ public class Pedido {
 	private LocalDate data_pedido;
 	private LocalDate data_entrega;
 	private LocalDate data_envio;
+	@Enumerated(EnumType.STRING)
 	private StatusEnum status_pedido;
 	private double valor_total;
+	@ManyToOne
+	private Cliente cliente;
 	
 	
 	public Long getId_pedido() {
@@ -54,6 +60,12 @@ public class Pedido {
 	}
 	public void setValor_total(double valor_total) {
 		this.valor_total = valor_total;
+	}
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
 }
