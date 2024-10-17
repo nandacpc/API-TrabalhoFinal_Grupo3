@@ -14,7 +14,7 @@ public class Endereco {
 	private String rua;
 	private String bairro;
 	private String cidade;
-	private String numero;
+	private int numero;
 	private String complemento;
 	private String uf;
 	
@@ -42,10 +42,10 @@ public class Endereco {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public String getNumero() {
+	public int getNumero() {
 		return numero;
 	}
-	public void setNumero(String numero) {
+	public void setNumero(int numero) {
 		this.numero = numero;
 	}
 	public String getComplemento() {

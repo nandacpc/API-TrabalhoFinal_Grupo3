@@ -15,6 +15,8 @@ public class ItemPedido {
 	private double percentual_desconto;
 	private double valor_bruto;
 	private double valor_liquido;
+	
+	
 	public Long getId_item_pedido() {
 		return id_item_pedido;
 	}

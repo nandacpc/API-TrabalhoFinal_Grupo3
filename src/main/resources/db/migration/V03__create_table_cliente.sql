@@ -5,5 +5,7 @@ CREATE TABLE clientes
     nome_completo varchar(100),
     cpf varchar(15),
     telefone varchar(15),
-    data_nascimento date  
+    data_nascimento date,
+    constraint fk_cliente_endereco foreign key (id_endereco)
+    references enderecos (id_endereco) 
 )

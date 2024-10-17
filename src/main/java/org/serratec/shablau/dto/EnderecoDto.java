@@ -6,7 +6,7 @@ public record EnderecoDto(
 		String rua,
 		String bairro,
 		String cidade,
-		String numero,
+		int numero,
 		String complemento,
 		String uf
 		) {
