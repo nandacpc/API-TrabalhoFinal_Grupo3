@@ -18,6 +18,12 @@ public class Endereco {
 	private String complemento;
 	private String uf;
 	
+	public Long getId_endereco() {
+		return id_endereco;
+	}
+	public void setId_endereco(Long id_endereco) {
+		this.id_endereco = id_endereco;
+	}
 	public String getCep() {
 		return cep;
 	}
@@ -60,5 +66,4 @@ public class Endereco {
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
-
 }
