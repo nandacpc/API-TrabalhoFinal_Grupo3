@@ -1,15 +1,14 @@
 package org.serratec.shablau.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "itens_pedido")
 public class ItemPedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +18,10 @@ public class ItemPedido {
 	private double percentual_desconto;
 	private double valor_bruto;
 	private double valor_liquido;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Pedido> pedido;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Produto> produto;
+	@ManyToOne
+	Pedido pedido;
+	@ManyToOne
+	Produto produto;
 	
 	
 	public Long getId_item_pedido() {
@@ -61,16 +60,16 @@ public class ItemPedido {
 	public void setValor_liquido(double valor_liquido) {
 		this.valor_liquido = valor_liquido;
 	}
-	public List<Pedido> getPedido() {
+	public Pedido getPedido() {
 		return pedido;
 	}
-	public void setPedido(List<Pedido> pedido) {
+	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
-	public List<Produto> getProduto() {
+	public Produto getProduto() {
 		return produto;
 	}
-	public void setProduto(List<Produto> produto) {
+	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
 	

@@ -1,7 +1,7 @@
 package org.serratec.shablau.controller;
 
 import org.serratec.shablau.dto.PedidoDto;
-import org.serratec.shablau.model.Pedido;
+import org.serratec.shablau.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +16,8 @@ public class PedidoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoDto cadastrarPedido(@RequestBody @Valid PedidoDto pedidoDto) { 
-		Pedido pedidoEntity = servico.salvarPedido(pedidoDto.toEntity()); 
-		return PedidoDto.toDto(pedidoEntity);
+		PedidoDto pedido = servico.salvarPedido(pedidoDto); 
+		return pedido;
 	}
 	
 	/* EXEMPLO
@@ -39,4 +39,14 @@ public class PedidoController {
   }
 }
 */
+	
+//	public void adicionarProdutoAoPedido(Pedido pedido, Produto produto, int quantidade, double precoVenda) {
+//	    ItemPedido item = new ItemPedido();
+//	    item.setProduto(produto);
+//	    item.setQuantidade(quantidade);
+//	    item.setPrecoVenda(precoVenda);
+//	    // Calcular valor bruto e líquido
+//	    pedido.getItens().add(item);
+//	    item.setPedido(pedido); 
+//	}
 }

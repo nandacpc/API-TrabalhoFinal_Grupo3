@@ -1,13 +1,19 @@
 package org.serratec.shablau.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "produtos")
 public class Produto {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -18,6 +24,12 @@ public class Produto {
 	private LocalDate data_cadastro;
 	private double valor_unitario;
 	private String imagem; //passar o link da imagem
+	
+	@ManyToOne
+	private Categoria categoria;
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+	private List<ItemPedido> itens;
 		
 	
 	public Long getId_produto() {
@@ -61,6 +73,12 @@ public class Produto {
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+	public Categoria getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	
 }
