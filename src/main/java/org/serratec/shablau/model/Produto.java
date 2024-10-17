@@ -11,20 +11,20 @@ import jakarta.persistence.Id;
 public class Produto {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private Long id_produto;
 	private String nome;
 	private String descricao;
 	private int qtd_estoque;
 	private LocalDate data_cadastro;
 	private double valor_unitario;
 	private String imagem; //passar o link da imagem
+		
 	
-	
-	public Long getId() {
-		return id;
+	public Long getId_produto() {
+		return id_produto;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_produto(Long id_produto) {
+		this.id_produto = id_produto;
 	}
 	public String getNome() {
 		return nome;

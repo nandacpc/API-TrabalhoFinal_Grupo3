@@ -11,18 +11,19 @@ import jakarta.persistence.Id;
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id_cliente;
 	private String email;
 	private String nome_completo;
 	private String cpf;
 	private String telefone;
 	private LocalDate data_nascimento;
 	
-	public Long getId() {
-		return id;
+	
+	public Long getId_cliente() {
+		return id_cliente;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_cliente(Long id_cliente) {
+		this.id_cliente = id_cliente;
 	}
 	public String getEmail() {
 		return email;

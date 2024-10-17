@@ -11,19 +11,19 @@ import jakarta.persistence.Id;
 public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id_pedido;
 	private LocalDate data_pedido;
 	private LocalDate data_entrega;
 	private LocalDate data_envio;
-	private StatusEnum status;
+	private StatusEnum status_pedido;
 	private double valor_total;
 	
 	
-	public Long getId() {
-		return id;
+	public Long getId_pedido() {
+		return id_pedido;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setId_pedido(Long id_pedido) {
+		this.id_pedido = id_pedido;
 	}
 	public LocalDate getData_pedido() {
 		return data_pedido;
@@ -42,12 +42,12 @@ public class Pedido {
 	}
 	public void setData_envio(LocalDate data_envio) {
 		this.data_envio = data_envio;
+	}	
+	public StatusEnum getStatus_pedido() {
+		return status_pedido;
 	}
-	public StatusEnum getStatus() {
-		return status;
-	}
-	public void setStatus(StatusEnum status) {
-		this.status = status;
+	public void setStatus_pedido(StatusEnum status_pedido) {
+		this.status_pedido = status_pedido;
 	}
 	public double getValor_total() {
 		return valor_total;
