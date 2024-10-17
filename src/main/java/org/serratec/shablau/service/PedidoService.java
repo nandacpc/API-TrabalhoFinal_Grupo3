@@ -20,11 +20,11 @@ public class PedidoService {
 	}
 
 		// READ
-	public List<PedidoDto> obterTodos() {
+	public List<PedidoDto> obterTodosPedidos() {
 		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
 
-	public Optional<PedidoDto> obterPorId(Long id) {
+	public Optional<PedidoDto> obterPedidoPorId(Long id) {
 		if (!pedidoRepositorio.existsById(id)) {
 			return Optional.empty();
 		}
