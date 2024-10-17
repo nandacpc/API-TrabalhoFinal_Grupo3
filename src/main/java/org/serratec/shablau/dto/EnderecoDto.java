@@ -23,6 +23,7 @@ public record EnderecoDto(
 		endereco.setNumero(this.numero);
 		endereco.setComplemento(this.complemento);
 		endereco.setUf(this.uf);
+
         return endereco;
     }
 
@@ -31,4 +32,5 @@ public record EnderecoDto(
             		endereco.getRua(), endereco.getBairro(), endereco.getCidade(),
                     endereco.getNumero(), endereco.getComplemento(),endereco.getUf());
     }
+
 }

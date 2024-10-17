@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.serratec.shablau.model.Produto;
 
+
 public record ProdutoDto(
 		Long id_produto,
 		String nome,
@@ -19,6 +20,7 @@ public record ProdutoDto(
 		produto.setId_produto(this.id_produto);
 		produto.setNome(this.nome);
 		produto.setDescricao(this.descricao);
+		produto.setQtd_estoque(this.qtd_estoque);
 		produto.setData_cadastro(this.data_cadastro);
 		produto.setValor_unitario(this.valor_unitario);
 		produto.setImagem(this.imagem);

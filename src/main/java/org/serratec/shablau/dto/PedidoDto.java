@@ -32,5 +32,5 @@ public record PedidoDto(
                     pedido.getData_entrega(), pedido.getData_envio(), pedido.getStatus_pedido(),
                     pedido.getValor_total(), ClienteDto.toDto(pedido.getCliente()));
         }
-}
 
+}

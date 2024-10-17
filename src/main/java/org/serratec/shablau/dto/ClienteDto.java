@@ -32,3 +32,4 @@ public record ClienteDto(
 				cliente.getTelefone(), cliente.getData_nascimento(), EnderecoDto.toDto(cliente.getEndereco()));
 	}
 }
+
