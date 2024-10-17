@@ -14,12 +14,12 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepositorio;
 
-		// CREATE
+	// CREATE
 	public PedidoDto salvarPedido(PedidoDto pedidoDto) {
 		return PedidoDto.toDto(pedidoRepositorio.save(pedidoDto.toEntity()));
 	}
 
-		// READ
+	// READ
 	public List<PedidoDto> obterTodosPedidos() {
 		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
@@ -30,10 +30,10 @@ public class PedidoService {
 		}
 		return Optional.of(PedidoDto.toDto(pedidoRepositorio.findById(id).get()));
 	}
-	
-		//UPDATE
-	public Optional<PedidoDto> alterarPedido(Long id_pedido, PedidoDto pedidoDto){
-		if(!pedidoRepositorio.existsById(id_pedido)) {
+
+	// UPDATE
+	public Optional<PedidoDto> alterarPedido(Long id_pedido, PedidoDto pedidoDto) {
+		if (!pedidoRepositorio.existsById(id_pedido)) {
 			return Optional.empty();
 		}
 		Pedido pedidoEntity = pedidoDto.toEntity();
@@ -42,7 +42,7 @@ public class PedidoService {
 		return Optional.of(PedidoDto.toDto(pedidoEntity));
 	}
 
-		// DELETE
+	// DELETE
 	public boolean apagarPedido(Long id_pedido) {
 		if (!pedidoRepositorio.existsById(id_pedido)) {
 			return false;
