@@ -1,11 +1,11 @@
 CREATE TABLE enderecos
 (
     id_endereco serial primary key,
-    cep varchar(10),
-    rua varchar(100),
-    bairro varchar(50),
-    cidade varchar(50),
-    numero integer,
+    cep varchar(10) not null,
+    rua varchar(100) not null,
+    bairro varchar(50) not null,
+    cidade varchar(50) not null,
+    numero integer not null,
     complemento varchar(20),
-    uf varchar(2)
+    uf varchar(2) not null
 )

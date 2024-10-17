@@ -1,5 +1,10 @@
 package org.serratec.shablau.service;
 
+import org.serratec.shablau.repository.ClienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class ClienteService {
-	//Renan
+	@Autowired
+	ClienteRepository repositorio;
 }
+

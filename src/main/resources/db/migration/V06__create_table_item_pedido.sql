@@ -1,11 +1,11 @@
 CREATE TABLE itens_pedido
 (
     id_item_pedido serial primary key,
-    quantidade integer,
-    preco_venda double precision,
-    percentual_desconto double precision,
-    valor_bruto double precision,
-    valor_liquido double precision
+    quantidade int not null,
+    preco_venda numeric not null,
+    percentual_desconto numeric,
+    valor_bruto numeric not null,
+    valor_liquido numeric not null,
     constraint fk_itens_pedido_pedido foreign key (id_pedido)
     references pedidos (id_pedido)
     constraint fk_itens_pedido_produto foreign key (id_produto)
