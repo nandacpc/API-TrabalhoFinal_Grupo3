@@ -20,19 +20,11 @@ public class PedidoService {
 	}
 
 		// READ
-<<<<<<< HEAD
 	public List<PedidoDto> obterTodosPedidos() {
 		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
 
 	public Optional<PedidoDto> obterPedidoPorId(Long id) {
-=======
-	public List<PedidoDto> obterTodos() {
-		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
-	}
-
-	public Optional<PedidoDto> obterPorId(Long id) {
->>>>>>> 253a1a1ee5cbdc45d9e6e968f91667e1bfa6be18
 		if (!pedidoRepositorio.existsById(id)) {
 			return Optional.empty();
 		}
