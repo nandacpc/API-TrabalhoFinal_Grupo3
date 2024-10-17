@@ -17,7 +17,7 @@ public class Endereco {
 	private int numero;
 	private String complemento;
 	private String uf;
-	
+
 	public Long getId_endereco() {
 		return id_endereco;
 	}

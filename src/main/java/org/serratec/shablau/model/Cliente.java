@@ -2,21 +2,33 @@ package org.serratec.shablau.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 
 @Entity
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_cliente;
+	@Email
 	private String email;
+	@NotBlank
 	private String nome_completo;
+	@NotBlank
 	private String cpf;
+	@NotBlank
 	private String telefone;
+	@Past
 	private LocalDate data_nascimento;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Endereco endereco;
 	
 	
 	public Long getId_cliente() {
@@ -54,5 +66,11 @@ public class Cliente {
 	}
 	public void setData_nascimento(LocalDate data_nascimento) {
 		this.data_nascimento = data_nascimento;
+	}
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 }
