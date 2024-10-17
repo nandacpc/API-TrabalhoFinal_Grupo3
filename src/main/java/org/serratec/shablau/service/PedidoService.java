@@ -1,5 +1,9 @@
 package org.serratec.shablau.service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +13,8 @@ import org.serratec.shablau.model.Pedido;
 import org.serratec.shablau.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class PedidoService {
@@ -33,17 +38,32 @@ public class PedidoService {
         String cep = cliente.getEndereco().getCep();
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
 
-        RestTemplate restTemplate = new RestTemplate();
-        ViaCepResponse response = restTemplate.getForObject(url, ViaCepResponse.class);
+        try {
+			HttpClient httpClient = HttpClient.newHttpClient();
+			
+			HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().build();
+			
+			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			
+			if(response.statusCode() == 200) {
+				ObjectMapper objectMapper = new ObjectMapper();
+				ViaCepResponse cepResponse = objectMapper.readValue(response.body(), ViaCepResponse.class);
+				
+				if (cepResponse.getErro() == null) {
+					cliente.getEndereco().setRua(cepResponse.getLogradouro());
+					cliente.getEndereco().setBairro(cepResponse.getBairro());
+					cliente.getEndereco().setCidade(cepResponse.getLocalidade());
+					cliente.getEndereco().setUf(cepResponse.getUf());
+				} else {
+					throw new RuntimeException("CEP inválido ou não encontrado.");
+				}
+			} else {
+	            throw new RuntimeException("Falha na comunicação com o serviço ViaCep. Status: " + response.statusCode());
+	        }
+	    } catch (Exception e) {
+	        throw new RuntimeException("Erro ao consultar o serviço ViaCep: " + e.getMessage(), e);
+	    }
 
-        if (response != null && response.getErro() == null) {
-            cliente.getEndereco().setRua(response.getLogradouro());
-            cliente.getEndereco().setBairro(response.getBairro());
-            cliente.getEndereco().setCidade(response.getLocalidade());
-            cliente.getEndereco().setUf(response.getUf());
-        } else {
-            throw new RuntimeException("CEP inválido ou não encontrado.");
-        }
     }
 
     private static class ViaCepResponse {

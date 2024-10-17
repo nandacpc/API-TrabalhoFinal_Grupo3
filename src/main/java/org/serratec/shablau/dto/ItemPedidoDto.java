@@ -1,7 +1,5 @@
 package org.serratec.shablau.dto;
 
-import java.util.List;
-
 import org.serratec.shablau.model.ItemPedido;
 
 public record ItemPedidoDto(
@@ -11,8 +9,8 @@ public record ItemPedidoDto(
 		double percentual_desconto,
 		double valor_bruto,
 		double valor_liquido,
-		List<PedidoDto> pedido,
-		List<ProdutoDto> produto
+		PedidoDto pedido,
+		ProdutoDto produto
 		) {
 
 	public ItemPedido toEntity() {
@@ -23,15 +21,15 @@ public record ItemPedidoDto(
 		item_pedido.setPercentual_desconto(percentual_desconto);
 		item_pedido.setValor_bruto(valor_bruto);
 		item_pedido.setValor_liquido(valor_liquido);
-		item_pedido.setPedido(this.pedido.stream().map(p -> p.toEntity()).toList());
-		item_pedido.setProduto(this.produto.stream().map(pr -> pr.toEntity()).toList());
+		item_pedido.setPedido(this.pedido.toEntity());
+		item_pedido.setProduto(this.produto.toEntity());
 		return item_pedido;
 	}
 	
 	public static ItemPedidoDto toDto(ItemPedido item_pedido) {
 		return new ItemPedidoDto(item_pedido.getId_item_pedido(), item_pedido.getQuantidade(),
 				item_pedido.getPreco_venda(), item_pedido.getPercentual_desconto(), item_pedido.getValor_bruto(),
-				item_pedido.getValor_liquido(), item_pedido.getPedido().stream().map(p -> PedidoDto.toDto(p)).toList(), 
-				item_pedido.getProduto().stream().map(pr -> ProdutoDto.toDto(pr)).toList());
+				item_pedido.getValor_liquido(), PedidoDto.toDto(item_pedido.getPedido()), ProdutoDto.toDto(item_pedido.getProduto())
+				);
 	}
 }

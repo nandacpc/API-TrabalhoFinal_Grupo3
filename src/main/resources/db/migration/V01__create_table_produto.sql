@@ -7,6 +7,7 @@ CREATE TABLE produtos
     data_cadastro date not null,
     valor_unitario numeric(38,2) not null,
     imagem varchar(255),
+    id_categoria int not null,
     constraint fk_produto_categoria foreign key (id_categoria)
     references categorias (id_categoria)   
 )

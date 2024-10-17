@@ -6,6 +6,7 @@ CREATE TABLE pedidos
     data_envio date not null,
     status_pedido varchar(50) not null,
     valor_total numeric not null,
+    id_cliente int not null,
     constraint fk_pedido_cliente foreign key (id_cliente)
     references clientes (id_cliente) 
 )
