@@ -1,5 +1,8 @@
 package org.serratec.shablau.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.serratec.shablau.dto.PedidoDto;
 import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Pedido;
@@ -12,8 +15,9 @@ import org.springframework.web.client.RestTemplate;
 public class PedidoService {
 
     @Autowired
-    private PedidoRepository repositorio;
+    private PedidoRepository pedidoRepositorio;
 
+    //CREATE
     public PedidoDto salvarPedido(PedidoDto dto) {
         Pedido pedido = dto.toEntity();
 
@@ -21,7 +25,7 @@ public class PedidoService {
             preencherEnderecoViaCep(pedido.getCliente());
         }
 
-        Pedido pedidoSalvo = repositorio.save(pedido);
+        Pedido pedidoSalvo = pedidoRepositorio.save(pedido);
         return PedidoDto.toDto(pedidoSalvo);
     }
 
@@ -71,6 +75,37 @@ public class PedidoService {
             return uf;
         }
     }
+
+		// READ
+	public List<PedidoDto> obterTodosPedidos() {
+		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
+	}
+
+	public Optional<PedidoDto> obterPedidoPorId(Long id) {
+		if (!pedidoRepositorio.existsById(id)) {
+			return Optional.empty();
+		}
+		return Optional.of(PedidoDto.toDto(pedidoRepositorio.findById(id).get()));
+	}
+	
+		//UPDATE
+	public Optional<PedidoDto> alterarPedido(Long id_pedido, PedidoDto pedidoDto){
+		if(!pedidoRepositorio.existsById(id_pedido)) {
+			return Optional.empty();
+		}
+		Pedido pedidoEntity = pedidoDto.toEntity();
+		pedidoEntity.setId_pedido(id_pedido);
+		pedidoRepositorio.save(pedidoEntity);
+		return Optional.of(PedidoDto.toDto(pedidoEntity));
+	}
+
+		// DELETE
+	public boolean apagarPedido(Long id_pedido) {
+		if (!pedidoRepositorio.existsById(id_pedido)) {
+			return false;
+		}
+		pedidoRepositorio.deleteById(id_pedido);
+		return true;
+	}
+
 }
-
-

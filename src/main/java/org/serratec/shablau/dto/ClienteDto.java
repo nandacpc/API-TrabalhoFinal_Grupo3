@@ -41,3 +41,4 @@ public record ClienteDto(
 				cliente.getEndereco().getComplemento());
 	}
 }
+
