@@ -24,11 +24,6 @@ public class ProdutoService {
 	public List<ProdutoDto> obterTodosProdutos(){
 		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
-	
-
-	public List<ProdutoDto> obterTodosProdutos() {
-		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
-	}
 
 	public Optional<ProdutoDto> obterProdutoPorId(Long id) {
 		if (!produtoRepositorio.existsById(id)) {
