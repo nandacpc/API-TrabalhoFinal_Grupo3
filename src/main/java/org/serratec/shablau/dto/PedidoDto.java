@@ -17,6 +17,7 @@ public record PedidoDto(
 	
     public Pedido toEntity() {
         Pedido pedido = new Pedido();
+        
         pedido.setId_pedido(this.id_pedido);
         pedido.setData_pedido(this.data_pedido);
         pedido.setData_entrega(this.data_entrega);
@@ -24,6 +25,7 @@ public record PedidoDto(
         pedido.setStatus_pedido(this.status_pedido);
         pedido.setValor_total(this.valor_total);
         pedido.setCliente(this.cliente.toEntity());
+        
         return pedido;
     }
 

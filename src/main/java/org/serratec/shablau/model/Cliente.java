@@ -2,17 +2,19 @@ package org.serratec.shablau.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 
 @Entity
+@Table(name = "clientes")
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,8 @@ public class Cliente {
 	private String telefone;
 	@Past
 	private LocalDate data_nascimento;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco", foreignKey = @ForeignKey(name = "fk_cliente_endereco"))
 	private Endereco endereco;
 	
 	

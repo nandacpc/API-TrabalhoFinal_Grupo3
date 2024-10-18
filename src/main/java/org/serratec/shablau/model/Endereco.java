@@ -1,11 +1,13 @@
 package org.serratec.shablau.model;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-@Embeddable
+@Entity
+@Table(name = "enderecos")
 public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +18,7 @@ public class Endereco {
 	private String cidade;
 	private int numero;
 	private String complemento;
-	private String uf;
+	private String uf;		
 
 	public Long getId_endereco() {
 		return id_endereco;
