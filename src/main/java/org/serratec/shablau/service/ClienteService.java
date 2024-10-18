@@ -14,44 +14,28 @@ public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepositorio;
-
+	
+	@Autowired
+    private ViaCepService viaCepService;
+	
 	//CREATE
 	public ClienteDto salvarCliente(ClienteDto clienteDto) {
 		Cliente clienteEntity = clienteDto.toEntity();
 		viaCepService.preencherEnderecoViaCep(clienteEntity, clienteEntity.getEndereco().getNumero(), clienteEntity.getEndereco().getComplemento());
 		return ClienteDto.toDto(clienteRepositorio.save(clienteEntity));
 	}
-
-	// READ
-	public List<ClienteDto> obterTodosClientes() {
+	
+	//READ
+	public List<ClienteDto> obterTodos() {
 		return clienteRepositorio.findAll().stream().map(c -> ClienteDto.toDto(c)).toList();
 	}
-
-	public Optional<ClienteDto> obterClientePorId(Long id_cliente) {
-		if (!clienteRepositorio.existsById(id_cliente)) {
+	
+	public Optional<ClienteDto> obterPorId(Long id) {
+		if(!clienteRepositorio.existsById(id)) {
 			return Optional.empty();
 		}
-		return Optional.of(ClienteDto.toDto(clienteRepositorio.findById(id_cliente).get()));
-	}
-
-	// UPDATE
-	public Optional<ClienteDto> alterarCliente(Long id_cliente, ClienteDto clienteDto) {
-		if (!clienteRepositorio.existsById(id_cliente)) {
-			return Optional.empty();
-		}
-		Cliente clienteEntity = clienteDto.toEntity();
-		clienteEntity.setId_cliente(id_cliente);
-		clienteRepositorio.save(clienteEntity);
-		return Optional.of(ClienteDto.toDto(clienteEntity));
-	}
-
-	// DELETE
-	public boolean apagarCliente(Long id_cliente) {
-		if (!clienteRepositorio.existsById(id_cliente)) {
-			return false;
-		}
-		clienteRepositorio.deleteById(id_cliente);
-		return true;
+		return Optional.of(ClienteDto.toDto(clienteRepositorio.findById(id).get()));
+		
 	}
 	
 	public List<ClienteDto> obterPorNome(String nome) {
