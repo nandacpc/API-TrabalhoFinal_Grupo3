@@ -15,6 +15,9 @@ A API permitirá a gestão completa de um e-commerce de acessórios de celulares
 ![Flyway](https://img.shields.io/badge/Flyway-6DB33F?style=for-the-badge&logo=flyway&logoColor=white)  
 ![JPA/Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white)  
 ![H2 Database](https://img.shields.io/badge/H2%20Database-4A148C?style=for-the-badge&logo=h2&logoColor=white)  
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)  
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white)  
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)  
 
 ## Requisitos do Projeto 📋
 
