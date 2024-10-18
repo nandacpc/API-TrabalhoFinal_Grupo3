@@ -22,20 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/categorias")
 public class CategoriaController {
 	@Autowired
-	private CategoriaService categoriaServico;
-
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public CategoriaDto cadastrarCategoria(@RequestBody CategoriaDto categoriaDto) {
-		return categoriaServico.salvarCategoria(categoriaDto);
-	}
-
+    private CategoriaService categoriaServico;
+	
 	@GetMapping
+	public List<CategoriaDto> obterTodos() {
+		return categoriaServico.obterTodasCategorias();
+	}
+  
+  @GetMapping
 	public List<CategoriaDto> buscarTodasCategorias() {
 		return categoriaServico.obterTodasCategorias();
 	}
-
-	@GetMapping("/{id}")
+  
+  @GetMapping("/{id}")
 	public ResponseEntity<CategoriaDto> buscarCategoriaPorId(@PathVariable Long id_categoria) {
 		Optional<CategoriaDto> categoriaDto = categoriaServico.obterCategoriaPorId(id_categoria);
 
@@ -43,6 +42,12 @@ public class CategoriaController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(categoriaDto.get());
+	}
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public CategoriaDto cadastrarCategoria(@RequestBody CategoriaDto categoriaDto) {
+		return categoriaServico.salvarCategoria(categoriaDto);
 	}
 
 	@PutMapping("/{id}")

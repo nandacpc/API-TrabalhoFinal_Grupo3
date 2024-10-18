@@ -6,7 +6,6 @@ import org.serratec.shablau.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-	List<Cliente> findByNomeContainingIgnoreCase(String nome);
-
-	List<Cliente> findByCpf(String cpf);
+	List<Cliente> findByNomeCompletoContainingIgnoreCase(String nome);
+	Cliente findByCpf(String cpf);
 }

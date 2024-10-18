@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
+	
 	@Autowired
 	private ClienteRepository clienteRepositorio;
 
@@ -53,16 +54,14 @@ public class ClienteService {
 		return true;
 	}
 	
-	//JULIA - CRIAR FINDBY NO CLIENTEREPOSITORY
-//	public List<ClienteDto> obterPorNome(String nome) {
-//		List<Cliente> clientes = clienteRepositorio.findByNomeContainingIgnoreCase(nome);
-//		return clientes.stream().map(c -> ClienteDto.toDto(c)).toList();
-//	}
+	public List<ClienteDto> obterPorNome(String nome) {
+		List<Cliente> clientes = clienteRepositorio.findByNomeCompletoContainingIgnoreCase(nome);
+		return clientes.stream().map(c -> ClienteDto.toDto(c)).toList();
+	}
 	
-	//JULIA - CRIAR FINDBY NO CLIENTEREPOSITORY
-//	public Optional<ClienteDto> obterPorCpf(String cpf) {
-//		return Optional.of(ClienteDto.toDto(clienteRepositorio.findByCpf(cpf)));
-//	}
+	public Optional<ClienteDto> obterPorCpf(String cpf) {
+		return Optional.of(ClienteDto.toDto(clienteRepositorio.findByCpf(cpf)));
+	}
 	
 	//UPDATE
 	public Optional<ClienteDto> alterarCliente(Long id, ClienteDto clienteDto){
@@ -84,4 +83,3 @@ public class ClienteService {
 		return true;
 	}
 }
-

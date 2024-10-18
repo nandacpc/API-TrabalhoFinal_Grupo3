@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProdutoService {
+	
 	@Autowired
-
 	private ProdutoRepository produtoRepositorio;
 
 	// CREATE
@@ -21,6 +21,11 @@ public class ProdutoService {
 	}
 
 	// READ
+	public List<ProdutoDto> obterTodosProdutos(){
+		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
+
 	public List<ProdutoDto> obterTodosProdutos() {
 		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}

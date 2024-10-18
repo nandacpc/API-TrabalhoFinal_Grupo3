@@ -2,6 +2,7 @@ package org.serratec.shablau.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,14 +22,18 @@ public class Cliente {
 	private Long id_cliente;
 	@Email
 	private String email;
+	
 	@NotBlank
-	private String nome_completo;
+	@Column(name="nome_completo")
+	private String nomeCompleto;
 	@NotBlank
 	private String cpf;
 	@NotBlank
 	private String telefone;
+	
 	@Past
-	private LocalDate data_nascimento;
+	@Column(name="data_nascimento")
+	private LocalDate dataNascimento;
 	@OneToOne(fetch = FetchType.EAGER)
     //@JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco", foreignKey = @ForeignKey(name = "fk_cliente_endereco"))
 	private Endereco endereco;
@@ -46,11 +51,11 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getNome_completo() {
-		return nome_completo;
+	public String getNomeCompleto() {
+		return nomeCompleto;
 	}
-	public void setNome_completo(String nome_completo) {
-		this.nome_completo = nome_completo;
+	public void setNomeCompleto(String nomeCompleto) {
+		this.nomeCompleto = nomeCompleto;
 	}
 	public String getCpf() {
 		return cpf;
@@ -64,11 +69,11 @@ public class Cliente {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	public LocalDate getData_nascimento() {
-		return data_nascimento;
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
 	}
-	public void setData_nascimento(LocalDate data_nascimento) {
-		this.data_nascimento = data_nascimento;
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 	public Endereco getEndereco() {
 		return endereco;

@@ -34,6 +34,7 @@ public class CategoriaService {
   
   	public List<CategoriaDto> obterCategoriaPorNome(String nome){
 		List<Categoria> categoria = categoriaRepositorio.findByCategoriaNome(nome);
+
 		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
 

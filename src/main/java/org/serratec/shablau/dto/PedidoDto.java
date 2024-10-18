@@ -7,11 +7,11 @@ import org.serratec.shablau.model.StatusEnum;
 
 public record PedidoDto(
 		Long id_pedido, 
-		LocalDate data_pedido, 
-		LocalDate data_entrega, 
-		LocalDate data_envio, 
-		StatusEnum status_pedido,
-        double valor_total,
+		LocalDate dataPedido, 
+		LocalDate dataEntrega, 
+		LocalDate dataEnvio, 
+		StatusEnum statusPedido,
+        double valorTotal,
         ClienteDto cliente
         ) {
 	
@@ -19,20 +19,20 @@ public record PedidoDto(
         Pedido pedido = new Pedido();
         
         pedido.setId_pedido(this.id_pedido);
-        pedido.setData_pedido(this.data_pedido);
-        pedido.setData_entrega(this.data_entrega);
-        pedido.setData_envio(this.data_envio);
-        pedido.setStatus_pedido(this.status_pedido);
-        pedido.setValor_total(this.valor_total);
+        pedido.setDataPedido(this.dataPedido);
+        pedido.setDataEntrega(this.dataEntrega);
+        pedido.setDataEnvio(this.dataEnvio);
+        pedido.setStatusPedido(this.statusPedido);
+        pedido.setValorTotal(this.valorTotal);
         pedido.setCliente(this.cliente.toEntity());
         
         return pedido;
     }
 
     public static PedidoDto toDto(Pedido pedido) {
-            return new PedidoDto(pedido.getId_pedido(), pedido.getData_pedido(),
-                    pedido.getData_entrega(), pedido.getData_envio(), pedido.getStatus_pedido(),
-                    pedido.getValor_total(), ClienteDto.toDto(pedido.getCliente()));
+            return new PedidoDto(pedido.getId_pedido(), pedido.getDataPedido(),
+                    pedido.getDataEntrega(), pedido.getDataEnvio(), pedido.getStatusPedido(),
+                    pedido.getValorTotal(), ClienteDto.toDto(pedido.getCliente()));
         }
 
 }

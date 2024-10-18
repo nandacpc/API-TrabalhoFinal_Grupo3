@@ -8,10 +8,10 @@ import org.serratec.shablau.model.Endereco;
 public record ClienteDto(
 		Long id_cliente,
 		String email,
-		String nome_completo,
+		String nomeCompleto,
 		String cpf,
 		String telefone,
-		LocalDate data_nascimento,
+		LocalDate dataNascimento,
 		String cep,
 		int numero,
 		String complemento
@@ -21,10 +21,10 @@ public record ClienteDto(
 		Cliente cliente = new Cliente();
 		cliente.setId_cliente(this.id_cliente);
 		cliente.setEmail(this.email);
-		cliente.setNome_completo(this.nome_completo);
+		cliente.setNomeCompleto(this.nomeCompleto);
 		cliente.setCpf(this.cpf);
 		cliente.setTelefone(this.telefone);
-		cliente.setData_nascimento(this.data_nascimento);
+		cliente.setDataNascimento(this.dataNascimento);
 		
 		Endereco endereco = new Endereco();
 		endereco.setNumero(this.numero);
@@ -36,8 +36,8 @@ public record ClienteDto(
 	
 	public static ClienteDto toDto(Cliente cliente) {
 		return new ClienteDto(cliente.getId_cliente(), cliente.getEmail(),
-				cliente.getNome_completo(), cliente.getCpf(), 
-				cliente.getTelefone(), cliente.getData_nascimento(), cliente.getEndereco().getCep(), cliente.getEndereco().getNumero(),
+				cliente.getNomeCompleto(), cliente.getCpf(), 
+				cliente.getTelefone(), cliente.getDataNascimento(), cliente.getEndereco().getCep(), cliente.getEndereco().getNumero(),
 				cliente.getEndereco().getComplemento());
 	}
 }

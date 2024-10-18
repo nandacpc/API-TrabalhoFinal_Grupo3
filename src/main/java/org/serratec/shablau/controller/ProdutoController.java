@@ -1,6 +1,6 @@
 package org.serratec.shablau.controller;
 
-
+import java.util.List;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/produtos")
 public class ProdutoController {
+	
 	@Autowired
-	private ProdutoService produtoServico;
-
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDto cadastrarProduto(@RequestBody ProdutoDto produtoDto) {
-		return produtoServico.salvarProduto(produtoDto);
-	}
-
+    private ProdutoService produtoServico;
+	
 	@GetMapping
+	public List<ProdutoDto> obterTodos() {
+		return produtoServico.obterTodosProdutos();
+	}
+  
+  @GetMapping
 	public List<ProdutoDto> buscarTodosProdutos() {
 		return produtoServico.obterTodosProdutos();
 	}
@@ -44,6 +44,12 @@ public class ProdutoController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(produtoDto.get());
+	}
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public ProdutoDto cadastrarProduto(@RequestBody ProdutoDto produtoDto) {
+		return produtoServico.salvarProduto(produtoDto);
 	}
 
 	@PutMapping("/{id}")
