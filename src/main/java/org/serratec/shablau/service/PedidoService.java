@@ -30,6 +30,11 @@ public class PedidoService {
 		}
 		return Optional.of(PedidoDto.toDto(pedidoRepositorio.findById(id).get()));
 	}
+  
+  public List<PedidoDto> obterPorStatus(StatusEnum status){
+    List<Pedido> pedido = pedidoRepositorio.findByStatusPedido(status);
+    return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
+	}
 
 	// UPDATE
 	public Optional<PedidoDto> alterarPedido(Long id_pedido, PedidoDto pedidoDto) {

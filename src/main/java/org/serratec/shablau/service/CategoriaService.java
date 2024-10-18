@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CategoriaService {
+
 	@Autowired
 	private CategoriaRepository categoriaRepositorio;
 
@@ -30,10 +31,15 @@ public class CategoriaService {
 		}
 		return Optional.of(CategoriaDto.toDto(categoriaRepositorio.findById(id_categoria).get()));
 	}
+  
+  	public List<CategoriaDto> obterCategoriaPorNome(String nome){
+		List<Categoria> categoria = categoriaRepositorio.findByCategoriaNome(nome);
+		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
+	}
 
-	// UPDATE
-	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto) {
-		if (!categoriaRepositorio.existsById(id_categoria)) {
+	//UPDATE
+	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto){
+		if(!categoriaRepositorio.existsById(id_categoria)) {
 			return Optional.empty();
 		}
 		Categoria categoriaEntity = categoriaDto.toEntity();
