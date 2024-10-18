@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,9 +21,15 @@ public class Produto {
 	private Long id_produto;
 	private String nome;
 	private String descricao;
-	private int qtd_estoque;
-	private LocalDate data_cadastro;
-	private double valor_unitario;
+	
+	@Column(name = "qtd_estoque")
+	private int qtdEstoque;
+	
+	@Column(name = "data_cadastro")
+	private LocalDate dataCadastro;
+	
+	@Column(name = "valor_unitario")
+	private double valorUnitario;
 	private String imagem; //passar o link da imagem
 	
 	@ManyToOne
@@ -50,23 +57,23 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public int getQtd_estoque() {
-		return qtd_estoque;
+	public int getQtdEstoque() {
+		return qtdEstoque;
 	}
-	public void setQtd_estoque(int qtd_estoque) {
-		this.qtd_estoque = qtd_estoque;
+	public void setQtdEstoque(int qtdEstoque) {
+		this.qtdEstoque = qtdEstoque;
 	}
-	public LocalDate getData_cadastro() {
-		return data_cadastro;
+	public LocalDate getDataCadastro() {
+		return dataCadastro;
 	}
-	public void setData_cadastro(LocalDate data_cadastro) {
-		this.data_cadastro = data_cadastro;
+	public void setDataCadastro(LocalDate dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
-	public double getValor_unitario() {
-		return valor_unitario;
+	public double getValorUnitario() {
+		return valorUnitario;
 	}
-	public void setValor_unitario(double valor_unitario) {
-		this.valor_unitario = valor_unitario;
+	public void setValorUnitario(double valorUnitario) {
+		this.valorUnitario = valorUnitario;
 	}
 	public String getImagem() {
 		return imagem;

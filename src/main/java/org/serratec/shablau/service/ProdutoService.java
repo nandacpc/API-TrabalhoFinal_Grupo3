@@ -1,5 +1,6 @@
 package org.serratec.shablau.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.serratec.shablau.dto.ProdutoDto;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProdutoService {
+	
 	@Autowired
-
 	private ProdutoRepository produtoRepositorio;
 	
 	// CREATE
@@ -20,6 +21,10 @@ public class ProdutoService {
 	}
 	
 	// READ
+	public List<ProdutoDto> obterTodosProdutos(){
+		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
 	public Optional<ProdutoDto> obterProdutoPorId(Long id){
 		if(!produtoRepositorio.existsById(id)) {
 			return Optional.empty();

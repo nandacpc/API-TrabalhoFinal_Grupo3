@@ -8,9 +8,11 @@ import java.net.http.HttpResponse;
 import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Endereco;
 import org.serratec.shablau.model.EnderecoViaCep;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Service
 public class ViaCepService {
 	
 	public void preencherEnderecoViaCep(Cliente cliente, int numero, String complemento) { 

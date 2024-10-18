@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,15 +23,25 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_pedido;
+	
 	@PastOrPresent
-	private LocalDate data_pedido;
+	@Column(name="data_pedido")
+	private LocalDate dataPedido;
+	
 	@FutureOrPresent
-	private LocalDate data_entrega;
+	@Column(name="data_entrega")
+	private LocalDate dataEntrega;
+	
 	@FutureOrPresent
-	private LocalDate data_envio;
+	@Column(name="data_envio")
+	private LocalDate dataEnvio;
+	
 	@Enumerated(EnumType.STRING)
-	private StatusEnum status_pedido;
-	private double valor_total;
+	@Column(name="status_pedido")
+	private StatusEnum statusPedido;
+	
+	@Column(name="valot_total")
+	private double valorTotal;
 	
 	@ManyToOne
 	private Cliente cliente;
@@ -44,35 +55,35 @@ public class Pedido {
 	public void setId_pedido(Long id_pedido) {
 		this.id_pedido = id_pedido;
 	}
-	public LocalDate getData_pedido() {
-		return data_pedido;
+	public LocalDate getDataPedido() {
+		return dataPedido;
 	}
-	public void setData_pedido(LocalDate data_pedido) {
-		this.data_pedido = data_pedido;
+	public void setDataPedido(LocalDate dataPedido) {
+		this.dataPedido = dataPedido;
 	}
-	public LocalDate getData_entrega() {
-		return data_entrega;
+	public LocalDate getDataEntrega() {
+		return dataEntrega;
 	}
-	public void setData_entrega(LocalDate data_entrega) {
-		this.data_entrega = data_entrega;
+	public void setDataEntrega(LocalDate dataEntrega) {
+		this.dataEntrega = dataEntrega;
 	}
-	public LocalDate getData_envio() {
-		return data_envio;
+	public LocalDate getDataEnvio() {
+		return dataEnvio;
 	}
-	public void setData_envio(LocalDate data_envio) {
-		this.data_envio = data_envio;
+	public void setDataEnvio(LocalDate dataEnvio) {
+		this.dataEnvio = dataEnvio;
 	}	
-	public StatusEnum getStatus_pedido() {
-		return status_pedido;
+	public StatusEnum getStatusPedido() {
+		return statusPedido;
 	}
-	public void setStatus_pedido(StatusEnum status_pedido) {
-		this.status_pedido = status_pedido;
+	public void setStatusPedido(StatusEnum statusPedido) {
+		this.statusPedido = statusPedido;
 	}
-	public double getValor_total() {
-		return valor_total;
+	public double getValorTotal() {
+		return valorTotal;
 	}
-	public void setValor_total(double valor_total) {
-		this.valor_total = valor_total;
+	public void setValorTotal(double valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 	public Cliente getCliente() {
 		return cliente;
