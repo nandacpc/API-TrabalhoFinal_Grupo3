@@ -5,7 +5,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Endereco;
 import org.serratec.shablau.model.EnderecoViaCep;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ViaCepService {
 	
-	public void preencherEnderecoViaCep(Cliente cliente, int numero, String complemento) { 
-        String cep = cliente.getEndereco().getCep();
+	public static Endereco preencherEnderecoViaCep(String cep, int numero, String complemento) {
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
+        Endereco novoEndereco = null;
 
         try {
 			HttpClient httpClient = HttpClient.newHttpClient();
@@ -31,8 +30,7 @@ public class ViaCepService {
 				EnderecoViaCep enderecoViaCep = objectMapper.readValue(response.body(), EnderecoViaCep.class);
 				
 				if (enderecoViaCep != null) {
-					Endereco endereco = enderecoViaCep.toEntity();
-					cliente.setEndereco(endereco);
+					novoEndereco = enderecoViaCep.toEntity();					
 				} else {
 					throw new RuntimeException("CEP inválido ou não encontrado.");
 				}
@@ -42,6 +40,7 @@ public class ViaCepService {
 	    } catch (Exception e) {
 	        throw new RuntimeException("Erro ao consultar o serviço ViaCep: " + e.getMessage(), e);
 	    }
+        return novoEndereco;
 
     }
 }

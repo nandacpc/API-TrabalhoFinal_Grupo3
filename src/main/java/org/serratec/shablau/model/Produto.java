@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -22,7 +23,7 @@ public class Produto {
 	private String nome;
 	private String descricao;
 	
-	@Column(name = "qtd_estoque")
+	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
 	
 	@Column(name = "data_cadastro")
@@ -33,6 +34,7 @@ public class Produto {
 	private String imagem; //passar o link da imagem
 	
 	@ManyToOne
+	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)

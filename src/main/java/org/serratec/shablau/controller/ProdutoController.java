@@ -1,7 +1,6 @@
 package org.serratec.shablau.controller;
 
 import java.util.List;
-import java.util.List;
 import java.util.Optional;
 
 import org.serratec.shablau.dto.ProdutoDto;
@@ -27,16 +26,11 @@ public class ProdutoController {
     private ProdutoService produtoServico;
 	
 	@GetMapping
-	public List<ProdutoDto> obterTodos() {
-		return produtoServico.obterTodosProdutos();
-	}
-  
-  @GetMapping
 	public List<ProdutoDto> buscarTodosProdutos() {
 		return produtoServico.obterTodosProdutos();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id_produto}")
 	public ResponseEntity<ProdutoDto> buscarProdutoPorId(@PathVariable Long id_produto) {
 		Optional<ProdutoDto> produtoDto = produtoServico.obterProdutoPorId(id_produto);
 
@@ -52,9 +46,8 @@ public class ProdutoController {
 		return produtoServico.salvarProduto(produtoDto);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto,
-			@RequestBody ProdutoDto produtoDto) {
+	@PutMapping("/{id_produto}")
+	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto, @RequestBody ProdutoDto produtoDto) {
 		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoDto);
 		if (!produtoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -62,12 +55,26 @@ public class ProdutoController {
 		return ResponseEntity.ok(produtoAlterado.get());
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id_produto}")
 	public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
 		if (!produtoServico.apagarProduto(id_produto)) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.noContent().build();
 	}
+	
+//	{
+//	  "nome": "Capinha Iphone 15",
+//	  "descricao": "Uma capinha muito cara que faz o mesmo que todas as outras",
+//	  "qnt_estoque": 50,
+//	  "data_cadastro": "2024-10-18",
+//	  "valor_unitario": 29.90,
+//	  "imagem": "http://imagemdacapinha.jpg",
+//	  "categoria": {
+//	        "id_categoria": 1,
+//	        "nome": "Capinhas",
+//	        "descricao": "Capinhas para celulares"
+//	    }
+//	}
 
 }

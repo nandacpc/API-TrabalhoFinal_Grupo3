@@ -5,17 +5,16 @@ import java.time.LocalDate;
 import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Endereco;
 
-public record ClienteDto(
+public record ClienteDto (
 		Long id_cliente,
-		String email,
+		String email,		
 		String nomeCompleto,
 		String cpf,
 		String telefone,
-		LocalDate dataNascimento,
-		String cep,
-		int numero,
-		String complemento
-		) {
+		LocalDate dataNascimento,		
+		Endereco endereco
+		
+		){
 
 	public Cliente toEntity() {
 		Cliente cliente = new Cliente();
@@ -25,20 +24,21 @@ public record ClienteDto(
 		cliente.setCpf(this.cpf);
 		cliente.setTelefone(this.telefone);
 		cliente.setDataNascimento(this.dataNascimento);
+		cliente.setEndereco(this.endereco);
 		
-		Endereco endereco = new Endereco();
-		endereco.setNumero(this.numero);
-		endereco.setComplemento(this.complemento);
-		cliente.setEndereco(endereco);
-		
+//		Endereco endereco = new Endereco();
+//		endereco.setCep(cliente.getEndereco().getCep());
+//		endereco.setBairro(cliente.getEndereco().getBairro());
+//		endereco.setCidade(cliente.getEndereco().getCidade());
+//		endereco
 		return cliente;
+
+	}
+
+	public static ClienteDto toDto(Cliente cliente) {
+		return new ClienteDto(cliente.getId_cliente(), cliente.getEmail(), cliente.getNomeCompleto(), cliente.getCpf(), cliente.getTelefone(),
+				cliente.getDataNascimento(), cliente.getEndereco());
 	}
 	
-	public static ClienteDto toDto(Cliente cliente) {
-		return new ClienteDto(cliente.getId_cliente(), cliente.getEmail(),
-				cliente.getNomeCompleto(), cliente.getCpf(), 
-				cliente.getTelefone(), cliente.getDataNascimento(), cliente.getEndereco().getCep(), cliente.getEndereco().getNumero(),
-				cliente.getEndereco().getComplemento());
-	}
-}
 
+}
