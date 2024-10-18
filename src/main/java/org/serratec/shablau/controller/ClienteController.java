@@ -3,9 +3,11 @@ package org.serratec.shablau.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.shablau.dto.ClienteCadastroDto;
 import org.serratec.shablau.dto.ClienteDto;
 import org.serratec.shablau.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +26,11 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteServico;
 
-//	@PostMapping
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public ClienteDto cadastrarCliente(@RequestBody ClienteDto clienteDto) {
-//		return clienteServico.salvarCliente(clienteDto);
-//	}
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) {
+		return clienteServico.salvarCliente(clienteCadastroDto);
+	}
 
 	@GetMapping
 	public List<ClienteDto> buscarTodosClientes() {

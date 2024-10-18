@@ -13,7 +13,7 @@ public record EnderecoDto(
 		String uf
 		) {
 
-	public Endereco toEntity() {
+	public Endereco toEntity() { 
 		Endereco endereco = new Endereco();
 		endereco.setId_endereco(this.id_endereco);
 		endereco.setCep(this.cep);

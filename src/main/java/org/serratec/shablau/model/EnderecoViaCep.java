@@ -9,7 +9,7 @@ public record EnderecoViaCep(
     ) {
 	
 	public Endereco toEntity() {
-        Endereco endereco = new Endereco();
+        Endereco endereco = new Endereco(); 
         
         endereco.setRua(this.logradouro);
         endereco.setBairro(this.bairro);

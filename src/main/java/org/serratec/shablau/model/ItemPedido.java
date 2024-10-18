@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -18,9 +19,13 @@ public class ItemPedido {
 	private double percentual_desconto;
 	private double valor_bruto;
 	private double valor_liquido;
+	
 	@ManyToOne
+	@JoinColumn(name = "id_pedido")
 	Pedido pedido;
+	
 	@ManyToOne
+	@JoinColumn(name = "id_produto")
 	Produto produto;
 	
 	

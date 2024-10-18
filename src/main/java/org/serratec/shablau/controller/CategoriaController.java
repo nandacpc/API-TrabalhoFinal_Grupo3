@@ -23,11 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoriaController {
 	@Autowired
     private CategoriaService categoriaServico;
-	
-	@GetMapping
-	public List<CategoriaDto> obterTodos() {
-		return categoriaServico.obterTodasCategorias();
-	}
+
   
   @GetMapping
 	public List<CategoriaDto> buscarTodasCategorias() {

@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -40,10 +41,11 @@ public class Pedido {
 	@Column(name="status_pedido")
 	private StatusEnum statusPedido;
 	
-	@Column(name="valot_total")
+	@Column(name="valor_total")
 	private double valorTotal;
 	
 	@ManyToOne
+	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
 	
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
