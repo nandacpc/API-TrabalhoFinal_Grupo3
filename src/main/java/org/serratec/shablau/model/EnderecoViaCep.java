@@ -1,17 +1,23 @@
 package org.serratec.shablau.model;
 
-public record EnderecoViaCep(	
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record EnderecoViaCep(
+	String cep,
     String logradouro,
+    String complemento,
     String bairro,
     String localidade,
-    String uf,
-    String erro
+    String uf
     ) {
 	
 	public Endereco toEntity() {
         Endereco endereco = new Endereco(); 
         
+        endereco.setCep(this.cep);
         endereco.setRua(this.logradouro);
+        endereco.setComplemento(this.complemento);
         endereco.setBairro(this.bairro);
         endereco.setCidade(this.localidade);
         endereco.setUf(this.uf);

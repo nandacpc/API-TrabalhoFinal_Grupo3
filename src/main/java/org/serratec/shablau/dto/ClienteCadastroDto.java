@@ -4,13 +4,12 @@ import java.time.LocalDate;
 
 public record ClienteCadastroDto( 
 		String email,
-		String nomeCompleto,
+		String nome_completo,
 		String cpf,
 		String telefone,
-		LocalDate dataNascimento,
+		LocalDate data_nascimento,
 		String cep,
-		int numero,
-		String complemento
+		int numero
 		) {
 
 }

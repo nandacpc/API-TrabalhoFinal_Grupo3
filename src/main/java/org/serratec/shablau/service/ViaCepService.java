@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ViaCepService {
 	
-	public static Endereco preencherEnderecoViaCep(String cep, int numero, String complemento) {
-        String url = "https://viacep.com.br/ws/" + cep + "/json/";
+	public static Endereco preencherEnderecoViaCep(String cep, int numero) {
+        String url = "https://viacep.com.br/ws/" + cep + "/json";
         Endereco novoEndereco = null;
 
-        try {
+        try {        	
 			HttpClient httpClient = HttpClient.newHttpClient();
 			
 			HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().build();
@@ -30,17 +30,18 @@ public class ViaCepService {
 				EnderecoViaCep enderecoViaCep = objectMapper.readValue(response.body(), EnderecoViaCep.class);
 				
 				if (enderecoViaCep != null) {
-					novoEndereco = enderecoViaCep.toEntity();					
-				} else {
+					novoEndereco = enderecoViaCep.toEntity();
+				} 
+				else {
 					throw new RuntimeException("CEP inválido ou não encontrado.");
 				}
-			} else {
+			} 
+			else {
 	            throw new RuntimeException("Falha na comunicação com o serviço ViaCep. Status: " + response.statusCode());
 	        }
 	    } catch (Exception e) {
-	        throw new RuntimeException("Erro ao consultar o serviço ViaCep: " + e.getMessage(), e);
+	       throw new RuntimeException("Erro ao consultar o serviço ViaCep: " + e.getMessage(), e);
 	    }
         return novoEndereco;
-
     }
 }

@@ -20,15 +20,15 @@ public class ClienteService {
 	
 	//CREATE
 	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) {
-		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(), clienteCadastroDto.complemento());
-		Cliente clienteEntity = new Cliente();
-		clienteEntity.setCpf(clienteCadastroDto.cpf());
-		clienteEntity.setDataNascimento(clienteCadastroDto.dataNascimento());
-		clienteEntity.setEmail(clienteCadastroDto.email());
-		clienteEntity.setNomeCompleto(clienteCadastroDto.nomeCompleto());
-		clienteEntity.setTelefone(clienteCadastroDto.telefone());;
-		clienteEntity.setEndereco(endereco);
-		return ClienteDto.toDto(clienteRepositorio.save(clienteEntity));
+		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero());
+		Cliente novoCliente = new Cliente();
+		novoCliente.setCpf(clienteCadastroDto.cpf());
+		novoCliente.setDataNascimento(clienteCadastroDto.data_nascimento());
+		novoCliente.setEmail(clienteCadastroDto.email());
+		novoCliente.setNomeCompleto(clienteCadastroDto.nome_completo());
+		novoCliente.setTelefone(clienteCadastroDto.telefone());;
+		novoCliente.setEndereco(endereco);
+		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
 	
 	//READ
