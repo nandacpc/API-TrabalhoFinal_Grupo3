@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/produtos")
 public class ProdutoController {
@@ -42,12 +44,12 @@ public class ProdutoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDto cadastrarProduto(@RequestBody ProdutoDto produtoDto) {
+	public ProdutoDto cadastrarProduto(@RequestBody @Valid ProdutoDto produtoDto) {
 		return produtoServico.salvarProduto(produtoDto);
 	}
 
 	@PutMapping("/{id_produto}")
-	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto, @RequestBody ProdutoDto produtoDto) {
+	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable @Valid Long id_produto, @RequestBody ProdutoDto produtoDto) {
 		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoDto);
 		if (!produtoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
