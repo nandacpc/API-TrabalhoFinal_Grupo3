@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Past;
 
 @Entity
 @Table(name = "produtos")
@@ -20,12 +21,14 @@ public class Produto {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id_produto;
+	
 	private String nome;
 	private String descricao;
 	
 	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
 	
+	@Past(message="A data de cadastro deve ser inferior ao dia de hoje")
 	@Column(name = "data_cadastro")
 	private LocalDate dataCadastro;
 	
