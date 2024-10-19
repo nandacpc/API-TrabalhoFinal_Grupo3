@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.serratec.shablau.dto.ProdutoDto;
+import org.serratec.shablau.service.ProdutoCadastroDto;
 import org.serratec.shablau.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,8 +43,8 @@ public class ProdutoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDto cadastrarProduto(@RequestBody ProdutoDto produtoDto) {
-		return produtoServico.salvarProduto(produtoDto);
+	public ProdutoDto cadastrarProduto(@RequestBody ProdutoCadastroDto produtoCadastroDto) {
+		return produtoServico.salvarProduto(produtoCadastroDto);
 	}
 
 	@PutMapping("/{id_produto}")

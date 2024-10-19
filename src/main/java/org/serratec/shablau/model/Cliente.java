@@ -2,6 +2,7 @@ package org.serratec.shablau.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,7 +36,8 @@ public class Cliente {
 	@Past
 	@Column(name="data_nascimento")
 	private LocalDate dataNascimento;
-	@OneToOne(fetch = FetchType.EAGER)
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_endereco")
 	private Endereco endereco;
 	

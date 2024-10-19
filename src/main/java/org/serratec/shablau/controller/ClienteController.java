@@ -1,5 +1,7 @@
 package org.serratec.shablau.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) {
+	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) throws IOException, InterruptedException, URISyntaxException {
 		return clienteServico.salvarCliente(clienteCadastroDto);
 	}
 

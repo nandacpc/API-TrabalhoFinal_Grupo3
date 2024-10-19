@@ -3,6 +3,7 @@ package org.serratec.shablau.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.shablau.dto.CategoriaDto;
 import org.serratec.shablau.dto.ProdutoDto;
 import org.serratec.shablau.model.Produto;
 import org.serratec.shablau.repository.ProdutoRepository;
@@ -14,11 +15,24 @@ public class ProdutoService {
 	
 	@Autowired
 	private ProdutoRepository produtoRepositorio;
-
+	
+	@Autowired
+	private CategoriaService categoriaService;
+	
 	// CREATE
-	public ProdutoDto salvarProduto(ProdutoDto produtoDto) { 
-		return ProdutoDto.toDto(produtoRepositorio.save(produtoDto.toEntity()));
+	public ProdutoDto salvarProduto(ProdutoCadastroDto produtoCadastroDto) {
+		CategoriaDto categoria = categoriaService.obterCategoriaPorId(produtoCadastroDto.id_categoria())
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.id_categoria()));
+		
+		Produto novoProduto = new Produto();
+		novoProduto.setNome(produtoCadastroDto.nome());
+		novoProduto.setDescricao(produtoCadastroDto.descricao());
+		novoProduto.setDataCadastro(produtoCadastroDto.data_cadastro());
+		novoProduto.setQtdEstoque(produtoCadastroDto.qnt_estoque());
+		novoProduto.setCategoria(categoria.toEntity());		
+		return ProdutoDto.toDto(produtoRepositorio.save(novoProduto));
 	}
+	
 
 	// READ
 	public List<ProdutoDto> obterTodosProdutos(){
@@ -51,4 +65,14 @@ public class ProdutoService {
 		produtoRepositorio.deleteById(id_produto);
 		return true;
 	}
+	
+//	{
+//	  "nome": "Capinhas personalizadas",
+//	  "descricao": "Capinhas com imagens personalizadas",
+//	  "qnt_estoque": 15,
+//	  "data_cadastro": "2024-10-18",
+//	  "valor_unitario": 49.90,
+//	  "imagem": "http://imagemcapinhapersonalizada.jpg",
+//	  "id_categoria": 1
+//	}
 }
