@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -13,11 +15,15 @@ public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_endereco;
+	@NotBlank
+	@Size(max = 8, min = 8, message="O CEP deve conter 8 números. Não inclua outros caracteres.")
 	private String cep;
 	private String rua;
 	private String bairro;
 	private String cidade;
+	@NotBlank
 	private int numero;
+	@Size(max = 20, message="O complemento deve conter no máximo 20 caracteres.")
 	private String complemento;
 	private String uf;		
 

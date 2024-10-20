@@ -16,7 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -40,7 +40,7 @@ public class Cliente {
 	@NotBlank(message = "Informe um número de telefone.")
 	private String telefone;
 	@NotBlank(message = "Informe a data de nascimento.")
-	@Past(message = "A data de nascimento deve ser anterior à data atual.")
+	@PastOrPresent(message = "A data de nascimento deve ser anterior à data atual.")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 
