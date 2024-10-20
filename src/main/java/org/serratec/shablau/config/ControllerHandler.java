@@ -1,11 +1,13 @@
 package org.serratec.shablau.config;
 
 import java.net.http.HttpHeaders;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -13,16 +15,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ControllerHandler extends ResponseEntityExceptionHandler{
-	//Override
+	
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, 
 	        HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<String> erros = ex.getBindingResult()
-		        .getFieldErrors()
-		        .stream()
-		        .map(e -> String.format("Campo: %s - Mensagem: %s", 
-		                e.getField(), e.getDefaultMessage()))
-		        .collect(Collectors.toList());
-		return new ResponseEntity<>(erros, HttpStatus.NOT_ACCEPTABLE);
-
+		
+		List<String> erros= new ArrayList<>();
+		for(FieldError error: ex.getBindingResult().getFieldErrors()) {
+			erros.add(error.getField() + ": " + error.getDefaultMessage());
+		}
+		ErroResposta erroResposta = new ErroResposta(status.value(),
+				"Existem Campos Inválidos, Confira o preenchimento", LocalDateTime.now(), erros);
+		return super.handleMethodArgumentNotValid(ex, null, status, request);
 	}
 }
