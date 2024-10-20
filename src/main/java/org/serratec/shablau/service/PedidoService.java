@@ -27,8 +27,7 @@ public class PedidoService {
 	@Autowired
 	private ProdutoService produtoService;
 
-	// CREATE
-	
+	// CREATE	
 	public PedidoDto salvarPedido(PedidoCadastroDto pedidoCadastroDto) {
 		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.id_cliente())
 				.orElseThrow(() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.id_cliente()));
@@ -68,6 +67,10 @@ public class PedidoService {
 		
 		return PedidoDto.toDto(pedidoRepositorio.save(novoPedido));		
 	}
+	
+	public PedidoDto relatorio(Long id_pedido) {
+		return relatorio(id_pedido);
+	}
 
 	// READ
 	public List<PedidoDto> obterTodosPedidos() {
@@ -92,7 +95,7 @@ public class PedidoService {
 			return Optional.empty();
 		}
 		Pedido pedidoEntity = pedidoDto.toEntity();
-		pedidoEntity.setId_pedido(id_pedido);
+		pedidoEntity.setIdPedido(id_pedido);
 		pedidoRepositorio.save(pedidoEntity);
 		return Optional.of(PedidoDto.toDto(pedidoEntity));
 	}
@@ -105,5 +108,22 @@ public class PedidoService {
 		pedidoRepositorio.deleteById(id_pedido);
 		return true;
 	}
+	
+	//json cadastro pedido
+//	{
+//		"dataPedido": "2024-10-19",
+//		"statusPedido": "EM_PROCESSAMENTO",
+//		"id_cliente": 4,
+//		"itens":[{
+//			"quantidade": 2,
+//			"percentual_desconto": 0,
+//			"id_produto": 5	
+//			},
+//			{
+//			"quantidade": 5,
+//			"percentual_desconto": 10,
+//			"id_produto": 10	
+//			}]
+//		}
 
 }

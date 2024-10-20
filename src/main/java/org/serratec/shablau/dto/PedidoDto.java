@@ -8,7 +8,7 @@ import org.serratec.shablau.model.Pedido;
 import org.serratec.shablau.model.StatusEnum;
 
 public record PedidoDto(
-		Long id_pedido, 
+		Long idPedido, 
 		LocalDate dataPedido, 
 		LocalDate dataEntrega, 
 		LocalDate dataEnvio, 
@@ -21,7 +21,7 @@ public record PedidoDto(
     public Pedido toEntity() {
         Pedido pedido = new Pedido();
         
-        pedido.setId_pedido(this.id_pedido);
+        pedido.setIdPedido(this.idPedido);
         pedido.setDataPedido(this.dataPedido);
         pedido.setDataEntrega(this.dataEntrega);
         pedido.setDataEnvio(this.dataEnvio);
@@ -34,7 +34,7 @@ public record PedidoDto(
     }
 
     public static PedidoDto toDto(Pedido pedido) {
-            return new PedidoDto(pedido.getId_pedido(), pedido.getDataPedido(),
+            return new PedidoDto(pedido.getIdPedido(), pedido.getDataPedido(),
                     pedido.getDataEntrega(), pedido.getDataEnvio(), pedido.getStatusPedido(),
                     pedido.getValorTotal(), ClienteDto.toDto(pedido.getCliente()), pedido.getItens());
         }

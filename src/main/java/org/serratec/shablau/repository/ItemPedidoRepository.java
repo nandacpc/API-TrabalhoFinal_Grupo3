@@ -1,4 +1,7 @@
-package org.serratec.shablau.service;
+package org.serratec.shablau.repository;
+
+
+import org.serratec.shablau.dto.ItemPedidoDto;
 
 import org.serratec.shablau.model.ItemPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
