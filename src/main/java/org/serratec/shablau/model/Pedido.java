@@ -26,82 +26,97 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_pedido;
-	
+
 	@PastOrPresent
-	@Column(name="data_pedido")
-	private LocalDate dataPedido;	
+	@Column(name = "data_pedido")
+	private LocalDate dataPedido;
 	
 	@FutureOrPresent
-	@Column(name="data_envio")
+	@Column(name = "data_envio")
 	private LocalDate dataEnvio;
-	
+
 	@FutureOrPresent
-	@Column(name="data_entrega")
+	@Column(name = "data_entrega")
 	private LocalDate dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="status_pedido")
+	@Column(name = "status_pedido")
 	private StatusEnum statusPedido;
-	
-	@Column(name="valor_total")
+
+	@Column(name = "valor_total")
 	private double valorTotal;
-	
+
 	@ManyToOne
-	@JoinColumn(name="id_cliente")
+	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
-	
+
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<ItemPedido> itens;
 
-	//	@OneToOne
+	// @OneToOne
 //	private ItemPedido itens;
-	
+
 	public Long getId_pedido() {
 		return id_pedido;
 	}
+
 	public void setId_pedido(Long id_pedido) {
 		this.id_pedido = id_pedido;
 	}
+
 	public LocalDate getDataPedido() {
 		return dataPedido;
 	}
+
 	public void setDataPedido(LocalDate dataPedido) {
 		this.dataPedido = dataPedido;
 	}
+
 	public LocalDate getDataEntrega() {
 		return dataEntrega;
 	}
+
 	public void setDataEntrega(LocalDate dataEntrega) {
 		this.dataEntrega = dataEntrega;
 	}
+
 	public LocalDate getDataEnvio() {
 		return dataEnvio;
 	}
+
 	public void setDataEnvio(LocalDate dataEnvio) {
 		this.dataEnvio = dataEnvio;
-	}	
+	}
+
 	public StatusEnum getStatusPedido() {
 		return statusPedido;
 	}
+
 	public void setStatusPedido(StatusEnum statusPedido) {
 		this.statusPedido = statusPedido;
 	}
+
 	public double getValorTotal() {
 		return valorTotal;
 	}
+
 	public void setValorTotal(double valorTotal) {
 		this.valorTotal = valorTotal;
 	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
 	public List<ItemPedido> getItens() {
 		return itens;
 	}
+
 	public void setItens(List<ItemPedido> itens) {
 		itens.forEach(i -> i.setPedido(this));
 		this.itens = itens;
@@ -112,5 +127,5 @@ public class Pedido {
 //	public void setItens(ItemPedido itens) {		
 //		this.itens = itens;
 //	}
-	
+
 }

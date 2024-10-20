@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/categorias")
 public class CategoriaController {
@@ -42,12 +44,12 @@ public class CategoriaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CategoriaDto cadastrarCategoria(@RequestBody CategoriaDto categoriaDto) {
+	public CategoriaDto cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
 		return categoriaServico.salvarCategoria(categoriaDto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria,
+	public ResponseEntity<CategoriaDto> modificarCategoria(@Valid @PathVariable Long id_categoria,
 			@RequestBody CategoriaDto categoriaDto) {
 		Optional<CategoriaDto> categoriaAlterada = categoriaServico.alterarCategoria(id_categoria, categoriaDto);
 		if (!categoriaAlterada.isPresent()) {
