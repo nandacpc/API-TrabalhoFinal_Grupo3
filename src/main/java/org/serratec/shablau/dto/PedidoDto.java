@@ -1,7 +1,9 @@
 package org.serratec.shablau.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import org.serratec.shablau.model.ItemPedido;
 import org.serratec.shablau.model.Pedido;
 import org.serratec.shablau.model.StatusEnum;
 
@@ -12,7 +14,8 @@ public record PedidoDto(
 		LocalDate dataEnvio, 
 		StatusEnum statusPedido,
         double valorTotal,
-        ClienteDto cliente
+        ClienteDto cliente,
+        List<ItemPedido> itens
         ) {
 	
     public Pedido toEntity() {
@@ -25,6 +28,7 @@ public record PedidoDto(
         pedido.setStatusPedido(this.statusPedido);
         pedido.setValorTotal(this.valorTotal);
         pedido.setCliente(this.cliente.toEntity());
+        pedido.setItens(this.itens);
         
         return pedido;
     }
@@ -32,7 +36,7 @@ public record PedidoDto(
     public static PedidoDto toDto(Pedido pedido) {
             return new PedidoDto(pedido.getId_pedido(), pedido.getDataPedido(),
                     pedido.getDataEntrega(), pedido.getDataEnvio(), pedido.getStatusPedido(),
-                    pedido.getValorTotal(), ClienteDto.toDto(pedido.getCliente()));
+                    pedido.getValorTotal(), ClienteDto.toDto(pedido.getCliente()), pedido.getItens());
         }
 
 }

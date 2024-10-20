@@ -20,7 +20,7 @@ public class ClienteService {
 	
 	//CREATE
 	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) {
-		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero());
+		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(), clienteCadastroDto.complemento());
 		Cliente novoCliente = new Cliente();
 		novoCliente.setCpf(clienteCadastroDto.cpf());
 		novoCliente.setDataNascimento(clienteCadastroDto.data_nascimento());

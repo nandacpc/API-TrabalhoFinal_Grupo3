@@ -1,4 +1,6 @@
-package org.serratec.shablau.model;
+package org.serratec.shablau.dto;
+
+import org.serratec.shablau.model.Endereco;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -6,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record EnderecoViaCep(
 	String cep,
     String logradouro,
-    String complemento,
     String bairro,
     String localidade,
     String uf
@@ -17,7 +18,6 @@ public record EnderecoViaCep(
         
         endereco.setCep(this.cep);
         endereco.setRua(this.logradouro);
-        endereco.setComplemento(this.complemento);
         endereco.setBairro(this.bairro);
         endereco.setCidade(this.localidade);
         endereco.setUf(this.uf);

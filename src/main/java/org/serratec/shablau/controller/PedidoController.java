@@ -3,6 +3,7 @@ package org.serratec.shablau.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.shablau.dto.PedidoCadastroDto;
 import org.serratec.shablau.dto.PedidoDto;
 import org.serratec.shablau.model.StatusEnum;
 import org.serratec.shablau.service.PedidoService;
@@ -27,8 +28,8 @@ public class PedidoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PedidoDto cadastrarPedido(@RequestBody PedidoDto pedidoDto) {
-		return pedidoServico.salvarPedido(pedidoDto);
+	public PedidoDto cadastrarPedido(@RequestBody PedidoCadastroDto pedidoCadastroDto) {
+		return pedidoServico.salvarPedido(pedidoCadastroDto);
 	}
 
 	@GetMapping

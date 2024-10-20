@@ -1,5 +1,7 @@
 package org.serratec.shablau.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,11 +24,12 @@ public class ItemPedido {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_pedido")
-	Pedido pedido;
+	@JsonBackReference
+	private Pedido pedido;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_produto")
-	Produto produto;
+	private Produto produto;
 	
 	
 	public Long getId_item_pedido() {

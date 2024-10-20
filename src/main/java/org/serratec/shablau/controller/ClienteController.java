@@ -1,7 +1,5 @@
 package org.serratec.shablau.controller;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +28,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) throws IOException, InterruptedException, URISyntaxException {
+	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) {
 		return clienteServico.salvarCliente(clienteCadastroDto);
 	}
 
@@ -39,7 +37,7 @@ public class ClienteController {
 		return clienteServico.obterTodosClientes();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id_cliente}")
 	public ResponseEntity<ClienteDto> buscarClientePorId(@PathVariable Long id_cliente) {
 		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorId(id_cliente);
 
@@ -49,7 +47,7 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteDto.get());
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{id_cliente}")
 	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente,
 			@RequestBody ClienteDto clienteDto) {
 		Optional<ClienteDto> clienteAlterado = clienteServico.alterarCliente(id_cliente, clienteDto);
@@ -59,7 +57,7 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteAlterado.get());
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id_cliente}")
 	public ResponseEntity<Void> deletarCliente(@PathVariable Long id_cliente) {
 		if (!clienteServico.apagarCliente(id_cliente)) {
 			return ResponseEntity.notFound().build();
