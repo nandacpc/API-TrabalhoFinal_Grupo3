@@ -21,6 +21,11 @@ public class ClienteService {
 	//CREATE
 	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) {
 		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(), clienteCadastroDto.complemento());
+		
+		if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
+			throw new RuntimeException("CPF já cadastrado: " + clienteCadastroDto.cpf());
+		}
+		
 		Cliente novoCliente = new Cliente();
 		novoCliente.setCpf(clienteCadastroDto.cpf());
 		novoCliente.setDataNascimento(clienteCadastroDto.data_nascimento());
@@ -28,6 +33,8 @@ public class ClienteService {
 		novoCliente.setNomeCompleto(clienteCadastroDto.nome_completo());
 		novoCliente.setTelefone(clienteCadastroDto.telefone());;
 		novoCliente.setEndereco(endereco);
+		
+		
 		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
 	

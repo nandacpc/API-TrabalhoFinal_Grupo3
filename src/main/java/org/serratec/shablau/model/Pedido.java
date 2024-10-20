@@ -23,9 +23,11 @@ import jakarta.validation.constraints.PastOrPresent;
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
+
 	@Id
+	@Column(name="id_pedido")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_pedido;
+	private Long idPedido;
 	
 	@PastOrPresent
 	@Column(name="data_pedido")
@@ -54,14 +56,12 @@ public class Pedido {
 	@JsonManagedReference
 	private List<ItemPedido> itens;
 
-	//	@OneToOne
-//	private ItemPedido itens;
 	
-	public Long getId_pedido() {
-		return id_pedido;
+	public Long getIdPedido() {
+		return idPedido;
 	}
-	public void setId_pedido(Long id_pedido) {
-		this.id_pedido = id_pedido;
+	public void setIdPedido(Long id_pedido) {
+		this.idPedido = id_pedido;
 	}
 	public LocalDate getDataPedido() {
 		return dataPedido;

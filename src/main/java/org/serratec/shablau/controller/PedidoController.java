@@ -36,8 +36,13 @@ public class PedidoController {
 	public List<PedidoDto> buscarTodosPedidos() {
 		return pedidoServico.obterTodosPedidos();
 	}
+	
+	@GetMapping("/relatorio/{id_pedido}")
+	public PedidoDto exibirRelatorio(@PathVariable Long id_pedido) {
+		return pedidoServico.relatorio(id_pedido);
+	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id_pedido}")
 	public ResponseEntity<PedidoDto> buscarPedidoPorId(@PathVariable Long id_pedido) {
 		Optional<PedidoDto> pedidoDto = pedidoServico.obterPedidoPorId(id_pedido);
 
@@ -52,7 +57,7 @@ public class PedidoController {
 		return pedidoServico.obterPorStatus(StatusEnum.valueOf(status.toUpperCase()));
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/{id_pedido}")
 	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @RequestBody PedidoDto pedidoDto) {
 		Optional<PedidoDto> pedidoAlterado = pedidoServico.alterarPedido(id_pedido, pedidoDto);
 		if (!pedidoAlterado.isPresent()) {
@@ -61,7 +66,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidoAlterado.get());
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id_pedido}")
 	public ResponseEntity<Void> deletarPedido(@PathVariable Long id_pedido) {
 		if (!pedidoServico.apagarPedido(id_pedido)) {
 			return ResponseEntity.notFound().build();
