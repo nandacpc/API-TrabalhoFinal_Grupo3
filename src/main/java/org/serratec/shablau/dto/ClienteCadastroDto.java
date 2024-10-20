@@ -9,7 +9,8 @@ public record ClienteCadastroDto(
 		String telefone,
 		LocalDate data_nascimento,
 		String cep,
-		int numero
+		int numero,
+		String complemento
 		) {
 
 }

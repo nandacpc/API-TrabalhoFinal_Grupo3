@@ -3,6 +3,8 @@ package org.serratec.shablau.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,15 +29,15 @@ public class Pedido {
 	
 	@PastOrPresent
 	@Column(name="data_pedido")
-	private LocalDate dataPedido;
-	
-	@FutureOrPresent
-	@Column(name="data_entrega")
-	private LocalDate dataEntrega;
+	private LocalDate dataPedido;	
 	
 	@FutureOrPresent
 	@Column(name="data_envio")
 	private LocalDate dataEnvio;
+	
+	@FutureOrPresent
+	@Column(name="data_entrega")
+	private LocalDate dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status_pedido")
@@ -49,7 +51,11 @@ public class Pedido {
 	private Cliente cliente;
 	
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<ItemPedido> itens;
+
+	//	@OneToOne
+//	private ItemPedido itens;
 	
 	public Long getId_pedido() {
 		return id_pedido;
@@ -93,5 +99,18 @@ public class Pedido {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	public List<ItemPedido> getItens() {
+		return itens;
+	}
+	public void setItens(List<ItemPedido> itens) {
+		itens.forEach(i -> i.setPedido(this));
+		this.itens = itens;
+	}
+//	public ItemPedido getItens() {
+//		return itens;
+//	}
+//	public void setItens(ItemPedido itens) {		
+//		this.itens = itens;
+//	}
 	
 }

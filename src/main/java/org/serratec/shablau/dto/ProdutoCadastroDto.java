@@ -1,4 +1,4 @@
-package org.serratec.shablau.service;
+package org.serratec.shablau.dto;
 
 import java.time.LocalDate;
 

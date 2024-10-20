@@ -3,7 +3,6 @@ package org.serratec.shablau.dto;
 import java.time.LocalDate;
 
 import org.serratec.shablau.model.Cliente;
-import org.serratec.shablau.model.Endereco;
 
 public record ClienteDto (
 		Long id_cliente,
@@ -12,8 +11,7 @@ public record ClienteDto (
 		String cpf,
 		String telefone,
 		LocalDate dataNascimento,		
-		Endereco endereco
-		
+		EnderecoDto endereco		
 		){
 
 	public Cliente toEntity() {
@@ -24,7 +22,7 @@ public record ClienteDto (
 		cliente.setCpf(this.cpf);
 		cliente.setTelefone(this.telefone);
 		cliente.setDataNascimento(this.dataNascimento);
-		cliente.setEndereco(this.endereco);
+		cliente.setEndereco(this.endereco.toEntity());
 		
 //		Endereco endereco = new Endereco();
 //		endereco.setCep(cliente.getEndereco().getCep());
@@ -37,7 +35,7 @@ public record ClienteDto (
 
 	public static ClienteDto toDto(Cliente cliente) {
 		return new ClienteDto(cliente.getId_cliente(), cliente.getEmail(), cliente.getNomeCompleto(), cliente.getCpf(), cliente.getTelefone(),
-				cliente.getDataNascimento(), cliente.getEndereco());
+				cliente.getDataNascimento(), EnderecoDto.toDto(cliente.getEndereco()));
 	}
 	
 

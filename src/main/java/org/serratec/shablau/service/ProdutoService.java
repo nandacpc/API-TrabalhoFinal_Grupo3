@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.serratec.shablau.dto.CategoriaDto;
+import org.serratec.shablau.dto.ProdutoCadastroDto;
 import org.serratec.shablau.dto.ProdutoDto;
 import org.serratec.shablau.model.Produto;
 import org.serratec.shablau.repository.ProdutoRepository;
