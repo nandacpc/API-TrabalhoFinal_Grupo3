@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
@@ -28,34 +29,35 @@ public class Pedido {
 	@Column(name="id_pedido")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idPedido;
-	
+
 	@PastOrPresent
-	@Column(name="data_pedido")
-	private LocalDate dataPedido;	
+	@Column(name = "data_pedido")
+	@NotBlank(message="Informe a data do pedido.")
+	private LocalDate dataPedido;
 	
 	@FutureOrPresent
-	@Column(name="data_envio")
+	@Column(name = "data_envio")
 	private LocalDate dataEnvio;
-	
+
 	@FutureOrPresent
-	@Column(name="data_entrega")
+	@Column(name = "data_entrega")
 	private LocalDate dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="status_pedido")
+	@Column(name = "status_pedido")
 	private StatusEnum statusPedido;
-	
-	@Column(name="valor_total")
+
+	@Column(name = "valor_total")
+	@NotBlank(message="Informe o valor total do pedido.")
 	private double valorTotal;
-	
+
 	@ManyToOne
-	@JoinColumn(name="id_cliente")
+	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
-	
+
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<ItemPedido> itens;
-
 	
 	public Long getIdPedido() {
 		return idPedido;
@@ -63,45 +65,59 @@ public class Pedido {
 	public void setIdPedido(Long id_pedido) {
 		this.idPedido = id_pedido;
 	}
+
 	public LocalDate getDataPedido() {
 		return dataPedido;
 	}
+
 	public void setDataPedido(LocalDate dataPedido) {
 		this.dataPedido = dataPedido;
 	}
+
 	public LocalDate getDataEntrega() {
 		return dataEntrega;
 	}
+
 	public void setDataEntrega(LocalDate dataEntrega) {
 		this.dataEntrega = dataEntrega;
 	}
+
 	public LocalDate getDataEnvio() {
 		return dataEnvio;
 	}
+
 	public void setDataEnvio(LocalDate dataEnvio) {
 		this.dataEnvio = dataEnvio;
-	}	
+	}
+
 	public StatusEnum getStatusPedido() {
 		return statusPedido;
 	}
+
 	public void setStatusPedido(StatusEnum statusPedido) {
 		this.statusPedido = statusPedido;
 	}
+
 	public double getValorTotal() {
 		return valorTotal;
 	}
+
 	public void setValorTotal(double valorTotal) {
 		this.valorTotal = valorTotal;
 	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
 	public List<ItemPedido> getItens() {
 		return itens;
 	}
+
 	public void setItens(List<ItemPedido> itens) {
 		itens.forEach(i -> i.setPedido(this));
 		this.itens = itens;
@@ -112,5 +128,5 @@ public class Pedido {
 //	public void setItens(ItemPedido itens) {		
 //		this.itens = itens;
 //	}
-	
+
 }

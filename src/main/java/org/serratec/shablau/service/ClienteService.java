@@ -37,7 +37,6 @@ public class ClienteService {
 		
 		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
-	
 	//READ
 	public List<ClienteDto> obterTodosClientes() {
 		return clienteRepositorio.findAll().stream().map(c -> ClienteDto.toDto(c)).toList();

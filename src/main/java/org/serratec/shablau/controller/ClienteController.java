@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/clientes")
 public class ClienteController {
@@ -28,7 +30,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDto cadastrarCliente(@RequestBody ClienteCadastroDto clienteCadastroDto) {
+	public ClienteDto cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) {
 		return clienteServico.salvarCliente(clienteCadastroDto);
 	}
 
@@ -49,7 +51,7 @@ public class ClienteController {
 
 	@PutMapping("/{id_cliente}")
 	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente,
-			@RequestBody ClienteDto clienteDto) {
+			@Valid @RequestBody ClienteDto clienteDto) {
 		Optional<ClienteDto> clienteAlterado = clienteServico.alterarCliente(id_cliente, clienteDto);
 		if (!clienteAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();

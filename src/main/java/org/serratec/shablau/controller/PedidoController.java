@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
+
 @RestController
 @RequestMapping(path = "/pedidos")
 public class PedidoController {
@@ -28,7 +31,7 @@ public class PedidoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PedidoDto cadastrarPedido(@RequestBody PedidoCadastroDto pedidoCadastroDto) {
+	public PedidoDto cadastrarPedido(@Valid @RequestBody PedidoCadastroDto pedidoCadastroDto) {
 		return pedidoServico.salvarPedido(pedidoCadastroDto);
 	}
 
@@ -56,6 +59,7 @@ public class PedidoController {
 	public List<PedidoDto> obterPorCliente(@PathVariable String status) {
 		return pedidoServico.obterPorStatus(StatusEnum.valueOf(status.toUpperCase()));
 	}
+
 
 	@PutMapping("/{id_pedido}")
 	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @RequestBody PedidoDto pedidoDto) {
