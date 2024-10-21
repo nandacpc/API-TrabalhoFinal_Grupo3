@@ -27,20 +27,19 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_cliente")
 	private Long idCliente;
+	@NotBlank
 	@Email(message="Confirme se seu e-mail é válido.")
-	@NotBlank(message = "Informe seu e-mail")
-	@Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")
 	private String email;
-	@NotBlank(message = "Informe seu nome completo")
+	@NotBlank(message = "O nome não pode estar em branco")
 	@Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
 	@Column(name = "nome_completo")
 	private String nomeCompleto;
 	@CPF(message = "CPF inválido")
 	private String cpf;
 	@Size(max = 15)
-	@NotBlank(message = "Informe um número de telefone.")
+	@NotBlank(message = "O telefone não pode estar em branco")
 	private String telefone;
-	@NotNull(message = "Informe a data de nascimento.")
+	@NotNull(message = "A data de nascimento não pode ser nula.")
 	@PastOrPresent(message = "A data de nascimento deve ser anterior à data atual.")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;

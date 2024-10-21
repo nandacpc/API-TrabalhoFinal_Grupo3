@@ -6,20 +6,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "enderecos")
 public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_endereco;
 	@Column(name = "id_endereco")
 	private Long idEndereco;
+	@NotBlank(message="O CEP não pode pode estar em branco.")
 	private String cep;
 	private String rua;
 	private String bairro;
 	private String cidade;
+	@Min(value = 1, message = "O número não pode ficar em branco.")
 	private int numero;
+	@Size(max=20, message="O complemento deve ter no máximo 20 caracteres.")
 	private String complemento;
 	private String uf;		
 	

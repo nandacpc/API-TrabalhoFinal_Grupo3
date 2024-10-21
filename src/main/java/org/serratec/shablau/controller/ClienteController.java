@@ -30,7 +30,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) {
+	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) throws Exception {
 		return ResponseEntity.ok(clienteServico.salvarCliente(clienteCadastroDto));
 	}
 
@@ -67,7 +67,7 @@ public class ClienteController {
 	@DeleteMapping("/{id_cliente}")
 	public ResponseEntity<String> deletarCliente(@PathVariable Long id_cliente) {
 		clienteServico.apagarCliente(id_cliente);
-		return ResponseEntity.ok("Cliente com ID " + id_cliente + "foi apagado com sucesso.");
+		return ResponseEntity.ok("O cliente com ID " + id_cliente + " foi excluído com sucesso.");
 	}
 
 }

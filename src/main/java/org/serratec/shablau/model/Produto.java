@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -27,23 +28,27 @@ public class Produto {
 	@Column(name = "id_produto")
 	private Long idProduto;
 	
-	@NotBlank
-	@Size(max = 100, message = "O nome do produto deve ter no máximo 200 caracteres.")
+	@NotBlank(message = "O nome do produto não pode estar em branco.")
+	@Size(max = 100, message = "O nome do produto deve ter no máximo 100 caracteres.")
 	private String nome;
 	
-	@Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")
+    @Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")
 	private String descricao;
 	
+    @Positive(message = "A quantidade em estoque deve ser um número positivo.")
 	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
-	@Past(message = "A data de cadastro deve ser inferior ao dia de hoje.")
+	
+    @Past(message = "A data de cadastro deve ser anterior à data atual.")
 	@Column(name = "data_cadastro")
-	@NotBlank(message = "Informe a data do cadastro.")
 	private LocalDate dataCadastro;
+	
+    @Positive(message = "O valor unitário deve ser um número positivo.")
 	@Column(name = "valor_unitario")
 	private double valorUnitario;
-	@Size(max = 255, message = "O link deve ter no máximo 200 caracteres.")
-	@URL
+	
+    @Size(max = 255, message = "O link da imagem deve ter no máximo 255 caracteres.")
+    @URL(message = "O link fornecido não é uma URL válida.")
 	private String imagem; // passar o link da imagem
 
 	@ManyToOne
