@@ -28,9 +28,9 @@ public class ClienteService {
 		
 		Cliente novoCliente = new Cliente();
 		novoCliente.setCpf(clienteCadastroDto.cpf());
-		novoCliente.setDataNascimento(clienteCadastroDto.data_nascimento());
+		novoCliente.setDataNascimento(clienteCadastroDto.dataNascimento());
 		novoCliente.setEmail(clienteCadastroDto.email());
-		novoCliente.setNomeCompleto(clienteCadastroDto.nome_completo());
+		novoCliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
 		novoCliente.setTelefone(clienteCadastroDto.telefone());;
 		novoCliente.setEndereco(endereco);
 		
@@ -65,7 +65,7 @@ public class ClienteService {
 			return Optional.empty();
 		}
 		Cliente clienteEntity = clienteDto.toEntity();
-		clienteEntity.setId_cliente(id);
+		clienteEntity.setIdCliente(id);
 		clienteRepositorio.save(clienteEntity);
 		return Optional.of(ClienteDto.toDto(clienteEntity));
 	}

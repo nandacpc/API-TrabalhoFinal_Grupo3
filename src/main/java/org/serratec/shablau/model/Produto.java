@@ -24,12 +24,16 @@ import jakarta.validation.constraints.Size;
 public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_produto;
+	@Column(name = "id_produto")
+	private Long idProduto;
+	
 	@NotBlank
 	@Size(max = 100, message = "O nome do produto deve ter no máximo 200 caracteres.")
 	private String nome;
+	
 	@Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")
 	private String descricao;
+	
 	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
 	@Past(message = "A data de cadastro deve ser inferior ao dia de hoje.")
@@ -49,12 +53,12 @@ public class Produto {
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
 	private List<ItemPedido> itens;
 
-	public Long getId_produto() {
-		return id_produto;
+	public Long getIdProduto() {
+		return idProduto;
 	}
 
-	public void setId_produto(Long id_produto) {
-		this.id_produto = id_produto;
+	public void setIdProduto(Long idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public String getNome() {

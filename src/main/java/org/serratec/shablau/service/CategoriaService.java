@@ -43,7 +43,7 @@ public class CategoriaService {
 			return Optional.empty();
 		}
 		Categoria categoriaEntity = categoriaDto.toEntity();
-		categoriaEntity.setId_categoria(id_categoria);
+		categoriaEntity.setIdCategoria(id_categoria);
 		categoriaRepositorio.save(categoriaEntity);
 		return Optional.of(CategoriaDto.toDto(categoriaEntity));
 	}

@@ -16,6 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
@@ -24,22 +25,27 @@ import jakarta.validation.constraints.Size;
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_cliente;
+	@Column(name = "id_cliente")
+	private Long idCliente;
+	
 	@Email(message="Confirme se seu e-mail é válido.")
 	@NotBlank(message = "Informe seu e-mail")
 	@Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")
 	private String email;
+	
 	@NotBlank(message = "Informe seu nome completo")
 	@Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
 	@Column(name = "nome_completo")
 	private String nomeCompleto;
-	@NotBlank(message = "Informe seu CPF")
+	
 	@CPF(message="CPF inválido")
 	private String cpf;
+	
 	@Size(max = 15)
 	@NotBlank(message = "Informe um número de telefone.")
 	private String telefone;
-	@NotBlank(message = "Informe a data de nascimento.")
+	
+	@NotNull(message = "Informe a data de nascimento.")
 	@PastOrPresent(message = "A data de nascimento deve ser anterior à data atual.")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
@@ -48,12 +54,12 @@ public class Cliente {
 	@JoinColumn(name = "id_endereco")
 	private Endereco endereco;
 
-	public Long getId_cliente() {
-		return id_cliente;
+	public Long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setId_cliente(Long id_cliente) {
-		this.id_cliente = id_cliente;
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 	public String getEmail() {
