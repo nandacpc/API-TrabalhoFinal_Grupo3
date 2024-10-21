@@ -28,6 +28,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ProdutoService produtoService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	// CREATE	
 	public PedidoDto salvarPedido(PedidoCadastroDto pedidoCadastroDto) {
@@ -66,16 +69,30 @@ public class PedidoService {
 
 		novoPedido.setItens(itensPedido);
 		
-		return PedidoDto.toDto(pedidoRepositorio.save(novoPedido));		
+		Pedido pedidoEntity = pedidoRepositorio.save(novoPedido);
+		String relatorio = gerarRelatorio(novoPedido.getIdPedido());
+		
+		emailService.enviarEmail(cliente.email(), "Novo pedido gerado", relatorio);
+		
+		return PedidoDto.toDto(pedidoEntity);		
 	}
 	
-	public PedidoRelatorioDto gerarRelatorio(Long idPedido) {
+	public String gerarRelatorio(Long idPedido) { //retornar string
 		List<ItemPedidoRelatorioDto> itensRelatorio = pedidoRepositorio.findItensByPedidoId(idPedido);
 		Pedido pedido = pedidoRepositorio.findById(idPedido).get();
-
-		return new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(), pedido.getValorTotal(), itensRelatorio);
-		//return pedidoRelatorio.stream().map(p -> PedidoDto.toDto(p)).toList();
+		PedidoRelatorioDto relatorio = new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(), pedido.getValorTotal(), itensRelatorio);
+		return relatorio.toString();
 	}
+	
+//public static String gerarHtmlRelatorio(RelatorioPedidoDTO relatorio) {
+//        
+//		StringBuilder html = new StringBuilder();
+//
+//        // Cabeçalho do HTML
+//        html.append("<html><head><title>Relatório de Pedido</title></head><body>");
+//
+//        // Título do relatório
+//        html.append("<h1>Relatório de Pedido</h1>");
 
 
 	// READ
@@ -108,12 +125,11 @@ public class PedidoService {
 		pedidoEntity.setStatusPedido(pedidoCadastroDto.statusPedido());
 		pedidoEntity.setCliente(cliente.toEntity());
 		
-		//List<ItemPedido> listaItens = pedidoEntity.getItens();
 		List<ItemPedido> listaItens = new ArrayList<ItemPedido>();
 		for (ItemPedidoCadastroDto itemDto : pedidoCadastroDto.itens()) {
 	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
 	                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
-	        //verificar se o produto existe antes de adicioná-lo novamente?
+	        
 			ItemPedido itemPedido = new ItemPedido();
 			itemPedido.setQuantidade(itemDto.quantidade());
 			itemPedido.setPercentual_desconto(itemDto.percentualDesconto());
@@ -149,16 +165,16 @@ public class PedidoService {
 //	{
 //		"dataPedido": "2024-10-19",
 //		"statusPedido": "EM_PROCESSAMENTO",
-//		"id_cliente": 4,
+//		"idCliente": 4,
 //		"itens":[{
 //			"quantidade": 2,
-//			"percentual_desconto": 0,
-//			"id_produto": 5	
+//			"percentualDesconto": 0,
+//			"idProduto": 5	
 //			},
 //			{
 //			"quantidade": 5,
-//			"percentual_desconto": 10,
-//			"id_produto": 10	
+//			"percentualDesconto": 10,
+//			"idProduto": 10	
 //			}]
 //		}
 

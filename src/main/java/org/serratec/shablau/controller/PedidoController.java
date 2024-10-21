@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.serratec.shablau.dto.PedidoCadastroDto;
 import org.serratec.shablau.dto.PedidoDto;
-import org.serratec.shablau.dto.PedidoRelatorioDto;
 import org.serratec.shablau.model.StatusEnum;
 import org.serratec.shablau.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +40,10 @@ public class PedidoController {
 		return pedidoServico.obterTodosPedidos();
 	}
 	
-	@GetMapping("/relatorio/{idPedido}")
-	public PedidoRelatorioDto exibirRelatorio(@PathVariable Long idPedido) {
-		return pedidoServico.gerarRelatorio(idPedido);
-	}
-	
-//	@GetMapping("/relatorio/{id_pedido}")
-//    public ResponseEntity<List<PedidoRelatorioDto>> exibirRelatorio(@PathVariable Long id_pedido) {
-//        List<PedidoRelatorioDto> pedidoRelatorio = pedidoServico.gerarRelatorio(id_pedido);
-//		return ResponseEntity.ok(pedidoRelatorio);
-//    }
-
+//	@GetMapping("/relatorio/{idPedido}")
+//	public PedidoRelatorioDto exibirRelatorio(@PathVariable Long idPedido) {
+//		return pedidoServico.gerarRelatorio(idPedido);
+//	}
 
 	@GetMapping("/{id_pedido}")
 	public ResponseEntity<PedidoDto> buscarPedidoPorId(@PathVariable Long id_pedido) {
