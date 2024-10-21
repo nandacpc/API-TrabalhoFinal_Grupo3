@@ -8,7 +8,7 @@ import org.serratec.shablau.model.StatusEnum;
 public record PedidoCadastroDto(
 	LocalDate dataPedido, 
 	StatusEnum statusPedido,
-    Long id_cliente,
+    Long idCliente,
     List<ItemPedidoCadastroDto> itens
 		) {
 }

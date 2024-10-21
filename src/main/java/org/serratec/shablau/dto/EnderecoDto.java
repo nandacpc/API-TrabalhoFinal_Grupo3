@@ -3,7 +3,7 @@ package org.serratec.shablau.dto;
 import org.serratec.shablau.model.Endereco;
 
 public record EnderecoDto(
-		Long id_endereco,
+		Long idEndereco,
 		String cep,
 		String rua,
 		String bairro,
@@ -15,7 +15,7 @@ public record EnderecoDto(
 
 	public Endereco toEntity() { 
 		Endereco endereco = new Endereco();
-		endereco.setId_endereco(this.id_endereco);
+		endereco.setIdEndereco(this.idEndereco);
 		endereco.setCep(this.cep);
 		endereco.setRua(this.rua);
 		endereco.setBairro(this.bairro);
@@ -28,7 +28,7 @@ public record EnderecoDto(
     }
 
     public static EnderecoDto toDto(Endereco endereco) {
-            return new EnderecoDto(endereco.getId_endereco(), endereco.getCep(),
+            return new EnderecoDto(endereco.getIdEndereco(), endereco.getCep(),
             		endereco.getRua(), endereco.getBairro(), endereco.getCidade(),
                     endereco.getNumero(), endereco.getComplemento(),endereco.getUf());
     }

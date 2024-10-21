@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.serratec.shablau.dto.ClienteDto;
 import org.serratec.shablau.dto.ItemPedidoCadastroDto;
+import org.serratec.shablau.dto.ItemPedidoRelatorioDto;
 import org.serratec.shablau.dto.PedidoCadastroDto;
 import org.serratec.shablau.dto.PedidoDto;
+import org.serratec.shablau.dto.PedidoRelatorioDto;
 import org.serratec.shablau.dto.ProdutoDto;
 import org.serratec.shablau.model.ItemPedido;
 import org.serratec.shablau.model.Pedido;
@@ -29,8 +31,8 @@ public class PedidoService {
 
 	// CREATE	
 	public PedidoDto salvarPedido(PedidoCadastroDto pedidoCadastroDto) {
-		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.id_cliente())
-				.orElseThrow(() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.id_cliente()));
+		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente())
+				.orElseThrow(() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.idCliente()));
 				
 		Pedido novoPedido = new Pedido();
 		novoPedido.setDataPedido(pedidoCadastroDto.dataPedido());
@@ -42,35 +44,39 @@ public class PedidoService {
 		List<ItemPedido> itensPedido = new ArrayList<>();
 		
 		for (ItemPedidoCadastroDto itemDto : pedidoCadastroDto.itens()) {
-	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.id_produto())
+	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
 	                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 		
 			ItemPedido itemPedido = new ItemPedido();
 			itemPedido.setQuantidade(itemDto.quantidade());
-			itemPedido.setPercentual_desconto(itemDto.percentual_desconto());
+			itemPedido.setPercentual_desconto(itemDto.percentualDesconto());
 			itemPedido.setProduto(produto.toEntity());
-			itemPedido.setPreco_venda(produto.valor_unitario());
-			itemPedido.setValor_bruto(produto.valor_unitario() * itemPedido.getQuantidade());
-			itemPedido.setValor_liquido(itemPedido.getValor_bruto() - (itemPedido.getValor_bruto() * itemPedido.getPercentual_desconto()/100));
+			itemPedido.setPrecoVenda(produto.valorUnitario());
+			itemPedido.setValorBruto(produto.valorUnitario() * itemPedido.getQuantidade());
+			itemPedido.setValor_liquido(itemPedido.getValorBruto() - (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto()/100));
 			itemPedido.setPedido(novoPedido);
 			
 			itensPedido.add(itemPedido);
 		}		
 		
 		double valorTotal = itensPedido.stream()
-		        .mapToDouble(ItemPedido::getValor_liquido)
+		        .mapToDouble(ItemPedido::getValorLiquido)
 		        .sum();
 		novoPedido.setValorTotal(valorTotal);
 
 		novoPedido.setItens(itensPedido);
 		
-		
 		return PedidoDto.toDto(pedidoRepositorio.save(novoPedido));		
 	}
 	
-	public PedidoDto relatorio(Long id_pedido) {
-		return relatorio(id_pedido);
+	public PedidoRelatorioDto gerarRelatorio(Long idPedido) {
+		List<ItemPedidoRelatorioDto> itensRelatorio = pedidoRepositorio.findItensByPedidoId(idPedido);
+		Pedido pedido = pedidoRepositorio.findById(idPedido).get();
+
+		return new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(), pedido.getValorTotal(), itensRelatorio);
+		//return pedidoRelatorio.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
+
 
 	// READ
 	public List<PedidoDto> obterTodosPedidos() {
