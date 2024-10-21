@@ -96,12 +96,42 @@ public class PedidoService {
 	}
 
 	// UPDATE
-	public Optional<PedidoDto> alterarPedido(Long id_pedido, PedidoDto pedidoDto) {
+	public Optional<PedidoDto> alterarDadosPedido(Long id_pedido, PedidoCadastroDto pedidoCadastroDto) {
 		if (!pedidoRepositorio.existsById(id_pedido)) {
 			return Optional.empty();
 		}
-		Pedido pedidoEntity = pedidoDto.toEntity();
-		pedidoEntity.setIdPedido(id_pedido);
+		Pedido pedidoEntity = pedidoRepositorio.findById(id_pedido)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente())
+				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		pedidoEntity.setDataPedido(pedidoCadastroDto.dataPedido());
+		pedidoEntity.setStatusPedido(pedidoCadastroDto.statusPedido());
+		pedidoEntity.setCliente(cliente.toEntity());
+		
+		//List<ItemPedido> listaItens = pedidoEntity.getItens();
+		List<ItemPedido> listaItens = new ArrayList<ItemPedido>();
+		for (ItemPedidoCadastroDto itemDto : pedidoCadastroDto.itens()) {
+	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
+	                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+	        //verificar se o produto existe antes de adicioná-lo novamente?
+			ItemPedido itemPedido = new ItemPedido();
+			itemPedido.setQuantidade(itemDto.quantidade());
+			itemPedido.setPercentual_desconto(itemDto.percentualDesconto());
+			itemPedido.setProduto(produto.toEntity());
+			itemPedido.setPrecoVenda(produto.valorUnitario());
+			itemPedido.setValorBruto(produto.valorUnitario() * itemPedido.getQuantidade());
+			itemPedido.setValor_liquido(itemPedido.getValorBruto() - (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto()/100));
+			itemPedido.setPedido(pedidoEntity);
+			
+			listaItens.add(itemPedido);
+		}		
+		
+		pedidoEntity.setItens(listaItens);
+		double valorTotal = listaItens.stream()
+		        .mapToDouble(ItemPedido::getValorLiquido)
+		        .sum();
+		pedidoEntity.setValorTotal(valorTotal);
+		
 		pedidoRepositorio.save(pedidoEntity);
 		return Optional.of(PedidoDto.toDto(pedidoEntity));
 	}

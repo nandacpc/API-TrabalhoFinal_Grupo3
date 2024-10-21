@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
@@ -32,7 +32,7 @@ public class Pedido {
 
 	@PastOrPresent
 	@Column(name = "data_pedido")
-	@NotBlank(message="Informe a data do pedido.")
+	@NotNull(message="Informe a data do pedido.")
 	private LocalDate dataPedido;
 	
 	@FutureOrPresent
@@ -48,7 +48,7 @@ public class Pedido {
 	private StatusEnum statusPedido;
 
 	@Column(name = "valor_total")
-	@NotBlank(message="Informe o valor total do pedido.")
+	@NotNull(message="Informe o valor total do pedido.")
 	private double valorTotal;
 
 	@ManyToOne
