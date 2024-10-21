@@ -70,8 +70,8 @@ public class PedidoController {
 
 
 	@PutMapping("/{id_pedido}")
-	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @RequestBody PedidoDto pedidoDto) {
-		Optional<PedidoDto> pedidoAlterado = pedidoServico.alterarPedido(id_pedido, pedidoDto);
+	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @RequestBody PedidoCadastroDto pedidoDto) {
+		Optional<PedidoDto> pedidoAlterado = pedidoServico.alterarDadosPedido(id_pedido, pedidoDto);
 		if (!pedidoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
