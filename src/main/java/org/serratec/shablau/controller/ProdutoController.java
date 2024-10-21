@@ -21,14 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping(path = "/produtos")
 public class ProdutoController {
-	
+
 	@Autowired
-    private ProdutoService produtoServico;
-	
+	private ProdutoService produtoServico;
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public ProdutoDto cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
+		return produtoServico.salvarProduto(produtoCadastroDto);
+	}
+
 	@GetMapping
 	public List<ProdutoDto> buscarTodosProdutos() {
 		return produtoServico.obterTodosProdutos();
@@ -44,15 +49,9 @@ public class ProdutoController {
 		return ResponseEntity.ok(produtoDto.get());
 	}
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-
-	public ProdutoDto cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
-		return produtoServico.salvarProduto(produtoCadastroDto);
-	}
-
 	@PutMapping("/{id_produto}")
-	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto, @Valid @RequestBody ProdutoDto produtoDto) {
+	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto,
+			@Valid @RequestBody ProdutoDto produtoDto) {
 		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoDto);
 		if (!produtoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -67,7 +66,7 @@ public class ProdutoController {
 		}
 		return ResponseEntity.noContent().build();
 	}
-	
+
 //	{
 //	  "nome": "Capinha Iphone 15",
 //	  "descricao": "Uma capinha muito cara que faz o mesmo que todas as outras",

@@ -16,7 +16,7 @@ public record ClienteDto (
 
 	public Cliente toEntity() {
 		Cliente cliente = new Cliente();
-		cliente.setId_cliente(this.id_cliente);
+		cliente.setIdCliente(this.id_cliente);
 		cliente.setEmail(this.email);
 		cliente.setNomeCompleto(this.nomeCompleto);
 		cliente.setCpf(this.cpf);
@@ -34,7 +34,7 @@ public record ClienteDto (
 	}
 
 	public static ClienteDto toDto(Cliente cliente) {
-		return new ClienteDto(cliente.getId_cliente(), cliente.getEmail(), cliente.getNomeCompleto(), cliente.getCpf(), cliente.getTelefone(),
+		return new ClienteDto(cliente.getIdCliente(), cliente.getEmail(), cliente.getNomeCompleto(), cliente.getCpf(), cliente.getTelefone(),
 				cliente.getDataNascimento(), EnderecoDto.toDto(cliente.getEndereco()));
 	}
 	

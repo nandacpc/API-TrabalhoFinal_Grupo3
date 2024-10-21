@@ -24,7 +24,6 @@ public class Categoria {
 	@NotBlank(message = "Informe a descrição.")
 	@Size(max = 200, message = "A descrição deve conter no máximo 200 caracteres.")
 	private String descricao;
-
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	private List<Produto> produtos;
 

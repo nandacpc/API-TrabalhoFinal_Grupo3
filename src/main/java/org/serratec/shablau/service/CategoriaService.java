@@ -3,6 +3,7 @@ package org.serratec.shablau.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.serratec.shablau.config.ResourceNotFoundException;
 import org.serratec.shablau.dto.CategoriaDto;
 import org.serratec.shablau.model.Categoria;
 import org.serratec.shablau.repository.CategoriaRepository;
@@ -40,7 +41,7 @@ public class CategoriaService {
 	//UPDATE
 	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto){
 		if(!categoriaRepositorio.existsById(id_categoria)) {
-			return Optional.empty();
+			throw new ResourceNotFoundException("A categoria com id " + id_categoria + " não foi encontrado.");
 		}
 		Categoria categoriaEntity = categoriaDto.toEntity();
 		categoriaEntity.setId_categoria(id_categoria);
@@ -49,11 +50,10 @@ public class CategoriaService {
 	}
 
 	// DELETE
-	public boolean apagarCategoria(Long id_categoria) {
+	public void apagarCategoria(Long id_categoria) {
 		if (!categoriaRepositorio.existsById(id_categoria)) {
-			return false;
+			throw new ResourceNotFoundException("A categoria com id " + id_categoria + " não foi encontrado.");
 		}
 		categoriaRepositorio.deleteById(id_categoria);
-		return true;
 	}
 }

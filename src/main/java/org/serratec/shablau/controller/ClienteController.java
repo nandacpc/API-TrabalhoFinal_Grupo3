@@ -24,19 +24,24 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(path = "/clientes")
 public class ClienteController {
-	
+
 	@Autowired
 	private ClienteService clienteServico;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClienteDto cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) {
-		return clienteServico.salvarCliente(clienteCadastroDto);
+	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) {
+		return ResponseEntity.ok(clienteServico.salvarCliente(clienteCadastroDto));
 	}
 
 	@GetMapping
-	public List<ClienteDto> buscarTodosClientes() {
-		return clienteServico.obterTodosClientes();
+	public ResponseEntity<List<ClienteDto>> buscarTodosClientes() {
+		List<ClienteDto> clientesDto = clienteServico.obterTodosClientes();
+
+		if (clientesDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(clientesDto);
 	}
 
 	@GetMapping("/{id_cliente}")
@@ -60,11 +65,9 @@ public class ClienteController {
 	}
 
 	@DeleteMapping("/{id_cliente}")
-	public ResponseEntity<Void> deletarCliente(@PathVariable Long id_cliente) {
-		if (!clienteServico.apagarCliente(id_cliente)) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<String> deletarCliente(@PathVariable Long id_cliente) {
+		clienteServico.apagarCliente(id_cliente);
+		return ResponseEntity.ok("Cliente com ID " + id_cliente + "foi apagado com sucesso.");
 	}
 
 }
