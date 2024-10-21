@@ -34,8 +34,9 @@ public class ClienteService {
 		novoCliente.setEmail(clienteCadastroDto.email());
 		novoCliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
 		novoCliente.setTelefone(clienteCadastroDto.telefone());
-		;
 		novoCliente.setEndereco(endereco);
+		
+		
 		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
 

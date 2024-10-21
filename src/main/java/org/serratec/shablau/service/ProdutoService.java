@@ -22,14 +22,14 @@ public class ProdutoService {
 	
 	// CREATE
 	public ProdutoDto salvarProduto(ProdutoCadastroDto produtoCadastroDto) {
-		CategoriaDto categoria = categoriaService.obterCategoriaPorId(produtoCadastroDto.id_categoria())
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.id_categoria()));
+		CategoriaDto categoria = categoriaService.obterCategoriaPorId(produtoCadastroDto.idCategoria())
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.idCategoria()));
 		
 		Produto novoProduto = new Produto();
 		novoProduto.setNome(produtoCadastroDto.nome());
 		novoProduto.setDescricao(produtoCadastroDto.descricao());
-		novoProduto.setDataCadastro(produtoCadastroDto.data_cadastro());
-		novoProduto.setQtdEstoque(produtoCadastroDto.qnt_estoque());
+		novoProduto.setDataCadastro(produtoCadastroDto.dataCadastro());
+		novoProduto.setQtdEstoque(produtoCadastroDto.qntEstoque());
 		novoProduto.setCategoria(categoria.toEntity());		
 		return ProdutoDto.toDto(produtoRepositorio.save(novoProduto));
 	}
@@ -53,7 +53,7 @@ public class ProdutoService {
 			return Optional.empty();
 		}
 		Produto produtoEntity = produtoDto.toEntity();
-		produtoEntity.setId_produto(id_produto);
+		produtoEntity.setIdProduto(id_produto);
 		produtoRepositorio.save(produtoEntity);
 		return Optional.of(ProdutoDto.toDto(produtoEntity));
 	}

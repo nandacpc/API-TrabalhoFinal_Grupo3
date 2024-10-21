@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.serratec.shablau.dto.PedidoCadastroDto;
 import org.serratec.shablau.dto.PedidoDto;
+import org.serratec.shablau.dto.PedidoRelatorioDto;
 import org.serratec.shablau.model.StatusEnum;
 import org.serratec.shablau.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,20 @@ public class PedidoController {
 	public List<PedidoDto> buscarTodosPedidos() {
 		return pedidoServico.obterTodosPedidos();
 	}
+	
+	@GetMapping("/relatorio/{idPedido}")
+	public PedidoRelatorioDto exibirRelatorio(@PathVariable Long idPedido) {
+		return pedidoServico.gerarRelatorio(idPedido);
+	}
+	
+//	@GetMapping("/relatorio/{id_pedido}")
+//    public ResponseEntity<List<PedidoRelatorioDto>> exibirRelatorio(@PathVariable Long id_pedido) {
+//        List<PedidoRelatorioDto> pedidoRelatorio = pedidoServico.gerarRelatorio(id_pedido);
+//		return ResponseEntity.ok(pedidoRelatorio);
+//    }
 
-	@GetMapping("/{id}")
+
+	@GetMapping("/{id_pedido}")
 	public ResponseEntity<PedidoDto> buscarPedidoPorId(@PathVariable Long id_pedido) {
 		Optional<PedidoDto> pedidoDto = pedidoServico.obterPedidoPorId(id_pedido);
 
@@ -55,8 +68,9 @@ public class PedidoController {
 		return pedidoServico.obterPorStatus(StatusEnum.valueOf(status.toUpperCase()));
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @Valid @RequestBody PedidoDto pedidoDto) {
+
+	@PutMapping("/{id_pedido}")
+	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @RequestBody PedidoDto pedidoDto) {
 		Optional<PedidoDto> pedidoAlterado = pedidoServico.alterarPedido(id_pedido, pedidoDto);
 		if (!pedidoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -64,7 +78,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidoAlterado.get());
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id_pedido}")
 	public ResponseEntity<Void> deletarPedido(@PathVariable Long id_pedido) {
 		if (!pedidoServico.apagarPedido(id_pedido)) {
 			return ResponseEntity.notFound().build();

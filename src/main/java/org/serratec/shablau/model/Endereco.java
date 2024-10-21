@@ -1,5 +1,6 @@
 package org.serratec.shablau.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,23 +16,24 @@ public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_endereco;
-//	@NotBlank
-//	@Size(max = 8, min = 8, message="O CEP deve conter 8 números. Não inclua outros caracteres.")
+	@Column(name = "id_endereco")
+	private Long idEndereco;
+	@NotBlank
 	private String cep;
 	private String rua;
 	private String bairro;
 	private String cidade;
-//	@NotBlank(message="Informe o número.")
 	private int numero;
-//	@Size(max = 20, message="O complemento deve conter no máximo 20 caracteres.")
+	private int numero;
+	@Size(max = 20, message="O complemento deve conter no máximo 20 caracteres.")
 	private String complemento;
 	private String uf;		
 
-	public Long getId_endereco() {
-		return id_endereco;
+	public Long getIdEndereco() {
+		return idEndereco;
 	}
-	public void setId_endereco(Long id_endereco) {
-		this.id_endereco = id_endereco;
+	public void setIdEndereco(Long idEndereco) {
+		this.idEndereco = idEndereco;
 	}
 	public String getCep() {
 		return cep;
