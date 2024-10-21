@@ -10,7 +10,6 @@ import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Endereco;
 import org.serratec.shablau.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +24,7 @@ public class ClienteService {
 				clienteCadastroDto.complemento());
 
 		if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
-			throw new DuplicateKeyException("CPF já cadastrado: " + clienteCadastroDto.cpf());
+			throw new IllegalArgumentException("CPF já cadastrado: " + clienteCadastroDto.cpf());
 		}
 
 		Cliente novoCliente = new Cliente();

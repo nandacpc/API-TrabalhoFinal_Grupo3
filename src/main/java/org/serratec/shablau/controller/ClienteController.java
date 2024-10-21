@@ -55,8 +55,7 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id_cliente}")
-	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente,
-			@Valid @RequestBody ClienteDto clienteDto) {
+	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente, @Valid @RequestBody ClienteDto clienteDto) {
 		Optional<ClienteDto> clienteAlterado = clienteServico.alterarCliente(id_cliente, clienteDto);
 		if (!clienteAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();

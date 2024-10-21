@@ -27,5 +27,21 @@ public class GlobalExceptionHandler {
 	        erroResposta.put("path", request.getRequestURI()); 
 	        return new ResponseEntity<>(erroResposta, HttpStatus.BAD_REQUEST);
 	    }
+	 
+//	 handleMethodArgumentNotValid
+//	 @ControllerAdvice
+//	 public class ValidationHandler extends ResponseEntityExceptionHandler {
+//
+//	 	@Override
+//	 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+//	 			org.springframework.http.HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+//	 		
+//	 		List<String> erros = ex.getBindingResult().getFieldErrors()
+//	 				.stream()
+//	 				.map(e -> e.getField() + " - " + e.getDefaultMessage())
+//	 				.collect(Collectors.toList());
+//	 		
+//	 		return new ResponseEntity<
+	 //aula de tratamento de exceção dia 08-10
 
 }
