@@ -18,19 +18,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
+
 	@Id
+	@Column(name="id_pedido")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_pedido;
+	private Long idPedido;
 
 	@PastOrPresent
 	@Column(name = "data_pedido")
-	@NotBlank(message="Informe a data do pedido.")
+	@NotNull(message="Informe a data do pedido.")
 	private LocalDate dataPedido;
 	
 	@FutureOrPresent
@@ -46,7 +48,7 @@ public class Pedido {
 	private StatusEnum statusPedido;
 
 	@Column(name = "valor_total")
-	@NotBlank(message="Informe o valor total do pedido.")
+	@NotNull(message="Informe o valor total do pedido.")
 	private double valorTotal;
 
 	@ManyToOne
@@ -56,16 +58,12 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<ItemPedido> itens;
-
-	// @OneToOne
-//	private ItemPedido itens;
-
-	public Long getId_pedido() {
-		return id_pedido;
+	
+	public Long getIdPedido() {
+		return idPedido;
 	}
-
-	public void setId_pedido(Long id_pedido) {
-		this.id_pedido = id_pedido;
+	public void setIdPedido(Long id_pedido) {
+		this.idPedido = id_pedido;
 	}
 
 	public LocalDate getDataPedido() {

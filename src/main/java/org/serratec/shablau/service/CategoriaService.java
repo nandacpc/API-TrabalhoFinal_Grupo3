@@ -44,7 +44,7 @@ public class CategoriaService {
 			throw new ResourceNotFoundException("A categoria com id " + id_categoria + " não foi encontrado.");
 		}
 		Categoria categoriaEntity = categoriaDto.toEntity();
-		categoriaEntity.setId_categoria(id_categoria);
+		categoriaEntity.setIdCategoria(id_categoria);
 		categoriaRepositorio.save(categoriaEntity);
 		return Optional.of(CategoriaDto.toDto(categoriaEntity));
 	}

@@ -2,6 +2,7 @@ package org.serratec.shablau.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,12 +16,17 @@ import jakarta.persistence.Table;
 public class ItemPedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_item_pedido;
+	@Column(name = "id_item_pedido")
+	private Long idItemPedido;
 	private int quantidade;
-	private double preco_venda;
-	private double percentual_desconto;
-	private double valor_bruto;
-	private double valor_liquido;
+	@Column(name = "preco_venda")
+	private double precoVenda;
+	@Column(name = "percentual_desconto")
+	private double percentualDesconto;
+	@Column(name = "valor_bruto")
+	private double valorBruto;
+	@Column(name = "valor_liquido")
+	private double valorLiquido;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_pedido")
@@ -32,11 +38,11 @@ public class ItemPedido {
 	private Produto produto;
 	
 	
-	public Long getId_item_pedido() {
-		return id_item_pedido;
+	public Long getIdItemPedido() {
+		return idItemPedido;
 	}
-	public void setId_item_pedido(Long id_item_pedido) {
-		this.id_item_pedido = id_item_pedido;
+	public void setId_item_pedido(Long idItemPedido) {
+		this.idItemPedido = idItemPedido;
 	}
 	public int getQuantidade() {
 		return quantidade;
@@ -44,29 +50,29 @@ public class ItemPedido {
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
 	}
-	public double getPreco_venda() {
-		return preco_venda;
+	public double getPrecoVenda() {
+		return precoVenda;
 	}
-	public void setPreco_venda(double preco_venda) {
-		this.preco_venda = preco_venda;
+	public void setPrecoVenda(double precoVenda) {
+		this.precoVenda = precoVenda;
 	}
-	public double getPercentual_desconto() {
-		return percentual_desconto;
+	public double getPercentualDesconto() {
+		return percentualDesconto;
 	}
-	public void setPercentual_desconto(double percentual_desconto) {
-		this.percentual_desconto = percentual_desconto;
+	public void setPercentual_desconto(double percentualDesconto) {
+		this.percentualDesconto = percentualDesconto;
 	}
-	public double getValor_bruto() {
-		return valor_bruto;
+	public double getValorBruto() {
+		return valorBruto;
 	}
-	public void setValor_bruto(double valor_bruto) {
-		this.valor_bruto = valor_bruto;
+	public void setValorBruto(double valorBruto) {
+		this.valorBruto = valorBruto;
 	}
-	public double getValor_liquido() {
-		return valor_liquido;
+	public double getValorLiquido() {
+		return valorLiquido;
 	}
-	public void setValor_liquido(double valor_liquido) {
-		this.valor_liquido = valor_liquido;
+	public void setValor_liquido(double valorLiquido) {
+		this.valorLiquido = valorLiquido;
 	}
 	public Pedido getPedido() {
 		return pedido;

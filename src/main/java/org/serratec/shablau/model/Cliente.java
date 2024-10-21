@@ -16,6 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
@@ -26,7 +27,9 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_cliente")
 	private Long idCliente;
-	@Email(message = "Confirme se seu e-mail é válido.")
+	@Email(message="Confirme se seu e-mail é válido.")
+	@NotBlank(message = "Informe seu e-mail")
+	@Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres.")
 	private String email;
 	@NotBlank(message = "Informe seu nome completo")
 	@Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
@@ -37,6 +40,7 @@ public class Cliente {
 	@Size(max = 15)
 	@NotBlank(message = "Informe um número de telefone.")
 	private String telefone;
+	@NotNull(message = "Informe a data de nascimento.")
 	@PastOrPresent(message = "A data de nascimento deve ser anterior à data atual.")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;

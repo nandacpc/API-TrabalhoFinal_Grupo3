@@ -60,7 +60,7 @@ public class CategoriaController {
 		return ResponseEntity.ok(categoriaAlterada.get());
 	}
 
-	@DeleteMapping("/{id_categoria}")
+	@DeleteMapping("/{id_categoria}") 
 	public ResponseEntity<String> deletarCategoria(@PathVariable Long id_categoria) {
 		categoriaServico.apagarCategoria(id_categoria);
 		return ResponseEntity.ok("A categoria com ID " + id_categoria + " foi apagado com sucesso.");

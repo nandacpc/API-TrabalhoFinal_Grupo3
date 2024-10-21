@@ -5,10 +5,10 @@ import java.time.LocalDate;
 public record ProdutoCadastroDto( 
 	String nome,
 	String descricao,
-	int qnt_estoque,
-	LocalDate data_cadastro,
-	double valor_unitario,
+	int qntEstoque,
+	LocalDate dataCadastro,
+	double valorUnitario,
 	String imagem,
-	Long id_categoria
+	Long idCategoria
 	) {
 }
