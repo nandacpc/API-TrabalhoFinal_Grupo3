@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.serratec.shablau.dto.PedidoCadastroDto;
 import org.serratec.shablau.dto.PedidoDto;
-import org.serratec.shablau.dto.PedidoRelatorioDto;
 import org.serratec.shablau.model.StatusEnum;
 import org.serratec.shablau.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -25,7 +25,6 @@ public class ClienteService {
 		if (clienteRepositorio.existsByEmail(clienteCadastroDto.email())) {
 			throw new IllegalArgumentException("Email já cadastrado: " + clienteCadastroDto.email());
 		} if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
-
 			throw new IllegalArgumentException("CPF já cadastrado: " + clienteCadastroDto.cpf());
 		}
 		Cliente novoCliente = new Cliente();
