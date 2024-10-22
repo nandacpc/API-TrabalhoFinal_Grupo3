@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
 import org.serratec.shablau.config.ResourceNotFoundException;
+=======
+>>>>>>> aab27e1d31ee8b739f50c1f05d0142c8f446ee2c
 import org.serratec.shablau.dto.ProdutoCadastroDto;
 import org.serratec.shablau.dto.ProdutoDto;
 import org.serratec.shablau.model.Categoria;
@@ -43,6 +46,7 @@ public class ProdutoService {
 	public Optional<ProdutoDto> obterProdutoPorId(Long idProduto) {
 		if (!produtoRepositorio.existsById(idProduto)) {
 			throw new ResourceNotFoundException("Produto com ID " + idProduto + " não encontrado.");
+			return Optional.empty();
 		}
 		return Optional.of(ProdutoDto.toDto(produtoRepositorio.findById(idProduto).get()));
 	}
@@ -94,13 +98,15 @@ public class ProdutoService {
 		produtoRepositorio.save(produtoEntity);
 		return Optional.of(ProdutoDto.toDto(produtoEntity));
 	}
-
-	// DELETE
-	public void apagarProduto(Long id_produto) {
+	
+	
+	
+	public boolean apagarProduto(Long id_produto) {
 	    if (!produtoRepositorio.existsById(id_produto)) {
 	        throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
 	    }
 	    produtoRepositorio.deleteById(id_produto);
+	    return true; // Retorne true se a exclusão foi bem-sucedida
 	}
 
 
