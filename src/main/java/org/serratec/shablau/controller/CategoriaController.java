@@ -59,6 +59,22 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriaDto.get());
 	}
+  @GetMapping("/descricao/{palavra}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
+	}
+  @GetMapping("/nome/{nome}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorNome(@PathVariable String nome) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorNome(nome);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
+	}
 
 	@PutMapping("/{id_categoria}")
 	@Operation(summary = "Altera uma categoria pelo id", description = "Dado um determinado número de id,é Possivel alterar tal categoria , e suas informações")

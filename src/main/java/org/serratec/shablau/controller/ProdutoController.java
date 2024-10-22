@@ -1,5 +1,6 @@
 package org.serratec.shablau.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,51 @@ public class ProdutoController {
 		}
 		return ResponseEntity.ok(produtoDto.get());
 	}
+	
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorNome(@PathVariable String nome) {
+		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorNome(nome);
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
+	}
+	
+	@GetMapping("/data/{data_inicio}/{data_final}")
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloData(@PathVariable LocalDate data_inicio, @PathVariable LocalDate data_final) {
+		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloData(data_inicio, data_final);
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
+	}	
+	
+	@GetMapping("/estoque/{min}/{max}")
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloEstoque(@PathVariable int min, @PathVariable int max) {
+		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloEstoque(min, max);
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
+	}
+	
+	@GetMapping("/preco/{valor_min}/{valor_max}")
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloValor(@PathVariable int valor_min, @PathVariable int valor_max) {
+		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloValor(valor_min, valor_max);
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
+	}
+	
+	@GetMapping("/categoria/{id_categoria}")
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorCategoria(@PathVariable Long id_categoria) {
+		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorCategoria(id_categoria);
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
+	}
 
 	@PutMapping("/{id_produto}")
 	@Operation(summary = "Altera um Produto pelo id", description = "Dado um determinado número de id,é Possivel alterar tal produto , e suas informações")
@@ -68,8 +114,8 @@ public class ProdutoController {
 		@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal produto por esse id,por favor verifique!"),
 		@ApiResponse(responseCode = "200", description = "Produto alterado!") })
 	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto,
-			@Valid @RequestBody ProdutoDto produtoDto) {
-		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoDto);
+			@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
+		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoCadastroDto);
 		if (!produtoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -88,18 +134,15 @@ public class ProdutoController {
 		return ResponseEntity.noContent().build();
 	}
 
+//ESTRUTURA DE POST E PUT
 //	{
 //	  "nome": "Capinha Iphone 15",
 //	  "descricao": "Uma capinha muito cara que faz o mesmo que todas as outras",
-//	  "qnt_estoque": 50,
-//	  "data_cadastro": "2024-10-18",
-//	  "valor_unitario": 29.90,
+//	  "qntEstoque": 50,
+//	  "dataCadastro": "2024-10-18",
+//	  "valorUnitario": 29.90,
 //	  "imagem": "http://imagemdacapinha.jpg",
-//	  "categoria": {
-//	        "id_categoria": 1,
-//	        "nome": "Capinhas",
-//	        "descricao": "Capinhas para celulares"
-//	    }
+//	   "idCategoria": 1
 //	}
 
 }
