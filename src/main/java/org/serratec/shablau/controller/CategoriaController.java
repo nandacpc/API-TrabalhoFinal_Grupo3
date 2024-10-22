@@ -24,24 +24,24 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "/categorias")
 public class CategoriaController {
 	@Autowired
-    private CategoriaService categoriaServico;
+	private CategoriaService categoriaServico;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
 		return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
 	}
-	
-  @GetMapping
+
+	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
-	  List<CategoriaDto> categoriasDto = categoriaServico.obterTodasCategorias();
-	  if(categoriasDto.isEmpty()) {
-		  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	  }
+		List<CategoriaDto> categoriasDto = categoriaServico.obterTodasCategorias();
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 		return ResponseEntity.ok(categoriasDto);
 	}
-  
-  @GetMapping("/{id_categoria}")
+
+	@GetMapping("/{id_categoria}")
 	public ResponseEntity<CategoriaDto> buscarCategoriaPorId(@PathVariable Long id_categoria) {
 		Optional<CategoriaDto> categoriaDto = categoriaServico.obterCategoriaPorId(id_categoria);
 
@@ -68,7 +68,8 @@ public class CategoriaController {
 	}
 
 	@PutMapping("/{id_categoria}")
-	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria, @Valid @RequestBody CategoriaDto categoriaDto) {
+	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria,
+			@Valid @RequestBody CategoriaDto categoriaDto) {
 		Optional<CategoriaDto> categoriaAlterada = categoriaServico.alterarCategoria(id_categoria, categoriaDto);
 		if (!categoriaAlterada.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -76,7 +77,7 @@ public class CategoriaController {
 		return ResponseEntity.ok(categoriaAlterada.get());
 	}
 
-	@DeleteMapping("/{id_categoria}") 
+	@DeleteMapping("/{id_categoria}")
 	public ResponseEntity<String> deletarCategoria(@PathVariable Long id_categoria) {
 		categoriaServico.apagarCategoria(id_categoria);
 		return ResponseEntity.ok("A categoria com ID " + id_categoria + " foi apagado com sucesso.");
