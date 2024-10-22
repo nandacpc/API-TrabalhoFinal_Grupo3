@@ -31,5 +31,5 @@ public class GlobalExceptionHandler {
 	        erroResposta.put("message", ex.getConstraintViolations().iterator().next().getMessage());
 	        erroResposta.put("path", request.getRequestURI()); 
 	        return new ResponseEntity<>(erroResposta, HttpStatus.BAD_REQUEST);
-    }   
+	 }
 }

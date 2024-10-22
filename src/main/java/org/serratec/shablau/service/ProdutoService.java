@@ -68,10 +68,10 @@ public class ProdutoService {
 //	{
 //	  "nome": "Capinhas personalizadas",
 //	  "descricao": "Capinhas com imagens personalizadas",
-//	  "qnt_estoque": 15,
-//	  "data_cadastro": "2024-10-18",
-//	  "valor_unitario": 49.90,
+//	  "qntEstoque": 15,
+//	  "dataCadastro": "2024-10-18",
+//	  "valorUnitario": 49.90,
 //	  "imagem": "http://imagemcapinhapersonalizada.jpg",
-//	  "id_categoria": 1
+//	  "idCategoria": 1
 //	}
 }
