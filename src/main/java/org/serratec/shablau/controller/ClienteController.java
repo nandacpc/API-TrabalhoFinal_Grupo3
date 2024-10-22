@@ -37,7 +37,6 @@ public class ClienteController {
 	@GetMapping
 	public ResponseEntity<List<ClienteDto>> buscarTodosClientes() {
 		List<ClienteDto> clientesDto = clienteServico.obterTodosClientes();
-
 		if (clientesDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
@@ -47,7 +46,24 @@ public class ClienteController {
 	@GetMapping("/{id_cliente}")
 	public ResponseEntity<ClienteDto> buscarClientePorId(@PathVariable Long id_cliente) {
 		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorId(id_cliente);
-
+		if (!clienteDto.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(clienteDto.get());
+	}
+	
+	@GetMapping("/{nome}")
+	public ResponseEntity<List<ClienteDto>> buscarClientePorNome(@PathVariable String nome) {
+		List<ClienteDto> clientesDto = clienteServico.obterClientePorNome(nome);
+		if (!clientesDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(clientesDto);
+	}
+	
+	@GetMapping("/{cpf}")
+	public ResponseEntity<ClienteDto> buscarClientePorCpf(@PathVariable String cpf) {
+		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorCpf(cpf);
 		if (!clienteDto.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -55,7 +71,7 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id_cliente}")
-	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente, @Valid @RequestBody ClienteDto clienteDto) {
+	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente, @Valid @RequestBody ClienteCadastroDto clienteDto) {
 		Optional<ClienteDto> clienteAlterado = clienteServico.alterarCliente(id_cliente, clienteDto);
 		if (!clienteAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
