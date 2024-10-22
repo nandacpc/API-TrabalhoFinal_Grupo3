@@ -43,7 +43,8 @@ public class CategoriaService {
 	
 	public List<CategoriaDto> obterCategoriaPorDescricao(String palavra){
 		List<Categoria> categoria = categoriaRepositorio.findByDescricaoContainingIgnoreCase(palavra);
-
+		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
+	}
 
 	// UPDATE
 	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto) {
