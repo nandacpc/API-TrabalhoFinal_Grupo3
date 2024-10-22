@@ -50,6 +50,22 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriaDto.get());
 	}
+  @GetMapping("/descricao/{palavra}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
+	}
+  @GetMapping("/nome/{nome}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorNome(@PathVariable String nome) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorNome(nome);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
+	}
 
 	@PutMapping("/{id_categoria}")
 	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria,
