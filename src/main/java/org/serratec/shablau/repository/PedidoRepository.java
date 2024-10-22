@@ -27,5 +27,4 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "WHERE p.id = :idPedido")
      List<ItemPedidoRelatorioDto> findItensByPedidoId(Long idPedido);
  
-    
-}
+ }

@@ -23,6 +23,7 @@ public class Categoria {
 	
 	@NotBlank(message = "O nome não pode estar em branco. Informe um nome válido.")
 	@Size(max = 50, message = "O nome deve ter no máximo 50 caracteres.")
+	@Column(nullable=false, unique=true)
 	private String nome;
 	
 	@NotBlank(message = "A descrição não pode estar em branco. Informe uma descrição válida.")

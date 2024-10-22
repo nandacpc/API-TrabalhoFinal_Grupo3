@@ -27,11 +27,11 @@ public class CategoriaController {
 	private CategoriaService categoriaServico;
 
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
-		return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
-	}
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
+        return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
+    }
+	
 	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterTodasCategorias();
