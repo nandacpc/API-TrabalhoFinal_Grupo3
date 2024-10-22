@@ -185,12 +185,14 @@ public class PedidoService {
 
 
 	// DELETE
-	public void apagarPedido(Long id_pedido) {
-		if (!pedidoRepositorio.existsById(id_pedido)) {
-			throw new ResourceNotFoundException("Cliente com ID " + id_pedido + " não encontrado.");
-		}
-		pedidoRepositorio.deleteById(id_pedido);
+	public boolean apagarPedido(Long id_pedido) {
+	    if (!pedidoRepositorio.existsById(id_pedido)) {
+	        throw new ResourceNotFoundException("Pedido com ID " + id_pedido + " não encontrado.");
+	    }
+	    pedidoRepositorio.deleteById(id_pedido);
+	    return true; // Retorna true após a exclusão
 	}
+
 
 	// json cadastro pedido
 //	{

@@ -124,11 +124,12 @@ public class ProdutoService {
 	}
 
 	// DELETE
-	public void apagarProduto(Long id_produto) {
-		if (!produtoRepositorio.existsById(id_produto)) {
-			throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
-		}
-		produtoRepositorio.deleteById(id_produto);
+	public boolean apagarProduto(Long id_produto) {
+	    if (!produtoRepositorio.existsById(id_produto)) {
+	        throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
+	    }
+	    produtoRepositorio.deleteById(id_produto);
+	    return true; // Retorne true se a exclusão foi bem-sucedida
 	}
 
 <<<<<<< HEAD
