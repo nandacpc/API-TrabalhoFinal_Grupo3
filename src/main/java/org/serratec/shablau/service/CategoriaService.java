@@ -14,34 +14,35 @@ import org.springframework.stereotype.Service;
 public class CategoriaService {
 
 	@Autowired
-    private CategoriaRepository categoriaRepositorio;
-	
-	 //CREATE
-    public CategoriaDto salvarCategoria(CategoriaDto categoriaDto) {
-		return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
-    }
+	private CategoriaRepository categoriaRepositorio;
 
-    // READ
+	// CREATE
+	public CategoriaDto salvarCategoria(CategoriaDto categoriaDto) {
+		return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
+	}
+
+	// READ
 	public List<CategoriaDto> obterTodasCategorias() {
 		return categoriaRepositorio.findAll().stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
 
 	public Optional<CategoriaDto> obterCategoriaPorId(Long id_categoria) {
 		if (!categoriaRepositorio.existsById(id_categoria)) {
-			return Optional.empty();
+			throw new ResourceNotFoundException("A categoria com ID " + id_categoria + " não foi encontrado.");
 		}
 		return Optional.of(CategoriaDto.toDto(categoriaRepositorio.findById(id_categoria).get()));
 	}
-	
-	public List<CategoriaDto> obterCategoriaPorNome(String nome){
+
+	// QUERY DERIES
+	public List<CategoriaDto> obterCategoriaPorNome(String nome) {
 		List<Categoria> categoria = categoriaRepositorio.findByNomeIgnoreCase(nome);
 		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
-	
-	//UPDATE
-	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto){
-		if(!categoriaRepositorio.existsById(id_categoria)) {
-			throw new ResourceNotFoundException("A categoria com id " + id_categoria + " não foi encontrado.");
+
+	// UPDATE
+	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto) {
+		if (!categoriaRepositorio.existsById(id_categoria)) {
+			throw new ResourceNotFoundException("A categoria com ID " + id_categoria + " não foi encontrado.");
 		}
 		Categoria categoriaEntity = categoriaDto.toEntity();
 		categoriaEntity.setIdCategoria(id_categoria);
@@ -52,7 +53,7 @@ public class CategoriaService {
 	// DELETE
 	public void apagarCategoria(Long id_categoria) {
 		if (!categoriaRepositorio.existsById(id_categoria)) {
-			throw new ResourceNotFoundException("A categoria com id " + id_categoria + " não foi encontrado.");
+			throw new ResourceNotFoundException("A categoria com ID " + id_categoria + " não foi encontrado.");
 		}
 		categoriaRepositorio.deleteById(id_categoria);
 	}

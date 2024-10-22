@@ -30,13 +30,17 @@ public class ProdutoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDto cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
-		return produtoServico.salvarProduto(produtoCadastroDto);
+	public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
+		return ResponseEntity.ok(produtoServico.salvarProduto(produtoCadastroDto));
 	}
 
 	@GetMapping
-	public List<ProdutoDto> buscarTodosProdutos() {
-		return produtoServico.obterTodosProdutos();
+	public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
+		List<ProdutoDto> produtosDto = produtoServico.obterTodosProdutos();
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
 	}
 
 	@GetMapping("/{id_produto}")
@@ -60,11 +64,9 @@ public class ProdutoController {
 	}
 
 	@DeleteMapping("/{id_produto}")
-	public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
-		if (!produtoServico.apagarProduto(id_produto)) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<String> deletarProduto(@PathVariable Long id_produto) {
+		produtoServico.apagarProduto(id_produto);
+		return ResponseEntity.ok("O produto com ID " + id_produto + " foi excluído com sucesso.");
 	}
 
 //	{
