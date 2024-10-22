@@ -16,12 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-<<<<<<< HEAD
 import jakarta.validation.constraints.PastOrPresent;
-=======
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Positive;
->>>>>>> 1ac6f66da363073813d04ce2ef67947a98875b61
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -43,12 +38,8 @@ public class Produto {
     @Positive(message = "A quantidade em estoque deve ser um número positivo.")
 	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
-<<<<<<< HEAD
+
 	@PastOrPresent(message = "A data de cadastro deve ser igual ou inferior ao dia de hoje.")
-=======
-	
-    @Past(message = "A data de cadastro deve ser anterior à data atual.")
->>>>>>> 1ac6f66da363073813d04ce2ef67947a98875b61
 	@Column(name = "data_cadastro")
 	private LocalDate dataCadastro;
 	
