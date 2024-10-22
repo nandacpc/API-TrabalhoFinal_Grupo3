@@ -122,11 +122,6 @@ public class Pedido {
 		itens.forEach(i -> i.setPedido(this));
 		this.itens = itens;
 	}
-//	public ItemPedido getItens() {
-//		return itens;
-//	}
-//	public void setItens(ItemPedido itens) {		
-//		this.itens = itens;
-//	}
+
 
 }

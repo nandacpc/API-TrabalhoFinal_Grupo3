@@ -62,14 +62,22 @@ public class ClienteService {
 	}
 
 	// UPDATE
-	public Optional<ClienteDto> alterarCliente(Long id, ClienteDto clienteDto) {
+	public Optional<ClienteDto> alterarCliente(Long id, ClienteCadastroDto clienteCadastroDto) {
 		if (!clienteRepositorio.existsById(id)) {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");
 		}
-		Cliente clienteAlterado = clienteDto.toEntity();
-		clienteAlterado.setIdCliente(id);
-		clienteRepositorio.save(clienteAlterado);
-		return Optional.of(ClienteDto.toDto(clienteAlterado));
+		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(),
+				clienteCadastroDto.complemento());
+		Cliente cliente = clienteRepositorio.findById(id)
+				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		cliente.setCpf(clienteCadastroDto.cpf());
+		cliente.setDataNascimento(clienteCadastroDto.dataNascimento());
+		cliente.setEmail(clienteCadastroDto.email());
+		cliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
+		cliente.setTelefone(clienteCadastroDto.telefone());
+		cliente.setEndereco(endereco);
+		
+		return Optional.of(ClienteDto.toDto(clienteRepositorio.save(cliente)));
 	}
 
 	// DELETE
