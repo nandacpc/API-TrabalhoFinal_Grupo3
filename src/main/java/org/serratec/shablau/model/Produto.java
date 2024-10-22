@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -36,7 +36,7 @@ public class Produto {
 	
 	@Column(name = "qnt_estoque")
 	private int qtdEstoque;
-	@Past(message = "A data de cadastro deve ser inferior ao dia de hoje.")
+	@PastOrPresent(message = "A data de cadastro deve ser igual ou inferior ao dia de hoje.")
 	@Column(name = "data_cadastro")
 	private LocalDate dataCadastro;
 	@Column(name = "valor_unitario")

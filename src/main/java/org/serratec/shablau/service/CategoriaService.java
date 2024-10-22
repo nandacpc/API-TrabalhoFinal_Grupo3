@@ -18,7 +18,10 @@ public class CategoriaService {
 	
 	 //CREATE
     public CategoriaDto salvarCategoria(CategoriaDto categoriaDto) {
-		return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
+    	if(categoriaDto.nome().isBlank()) {
+    		return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
+		}
+		throw new ResourceNotFoundException("A categoria já existe.");
     }
 
     // READ
@@ -34,7 +37,12 @@ public class CategoriaService {
 	}
 	
 	public List<CategoriaDto> obterCategoriaPorNome(String nome){
-		List<Categoria> categoria = categoriaRepositorio.findByNomeIgnoreCase(nome);
+		List<Categoria> categoria = categoriaRepositorio.findByNomeContainingIgnoreCase(nome);
+		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
+	}
+	
+	public List<CategoriaDto> obterCategoriaPorDescricao(String palavra){
+		List<Categoria> categoria = categoriaRepositorio.findByDescricaoContainingIgnoreCase(palavra);
 		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
 	

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/shablau/categorias")
+@RequestMapping(path = "/categorias")
 public class CategoriaController {
 	@Autowired
     private CategoriaService categoriaServico;
@@ -49,6 +49,22 @@ public class CategoriaController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(categoriaDto.get());
+	}
+  @GetMapping("/descricao/{palavra}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
+	}
+  @GetMapping("/nome/{nome}")
+	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorNome(@PathVariable String nome) {
+		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorNome(nome);
+		if (categoriasDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(categoriasDto);
 	}
 
 	@PutMapping("/{id_categoria}")

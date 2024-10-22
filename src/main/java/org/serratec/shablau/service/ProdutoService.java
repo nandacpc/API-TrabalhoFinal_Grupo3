@@ -1,12 +1,14 @@
 package org.serratec.shablau.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.serratec.shablau.dto.CategoriaDto;
 import org.serratec.shablau.dto.ProdutoCadastroDto;
 import org.serratec.shablau.dto.ProdutoDto;
+import org.serratec.shablau.model.Categoria;
 import org.serratec.shablau.model.Produto;
+import org.serratec.shablau.repository.CategoriaRepository;
 import org.serratec.shablau.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,11 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepository produtoRepositorio;
 	
-	@Autowired
-	private CategoriaService categoriaService;
+	@Autowired CategoriaRepository categoriaRepositorio;
 	
 	// CREATE
 	public ProdutoDto salvarProduto(ProdutoCadastroDto produtoCadastroDto) {
-		CategoriaDto categoria = categoriaService.obterCategoriaPorId(produtoCadastroDto.idCategoria())
+		Categoria categoria = categoriaRepositorio.findById(produtoCadastroDto.idCategoria())
 				.orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.idCategoria()));
 		
 		Produto novoProduto = new Produto();
@@ -30,30 +31,66 @@ public class ProdutoService {
 		novoProduto.setDescricao(produtoCadastroDto.descricao());
 		novoProduto.setDataCadastro(produtoCadastroDto.dataCadastro());
 		novoProduto.setQtdEstoque(produtoCadastroDto.qntEstoque());
-		novoProduto.setCategoria(categoria.toEntity());		
+		novoProduto.setCategoria(categoria);		
 		return ProdutoDto.toDto(produtoRepositorio.save(novoProduto));
-	}
-	
+	}	
 
 	// READ
 	public List<ProdutoDto> obterTodosProdutos(){
 		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
 
-	public Optional<ProdutoDto> obterProdutoPorId(Long id) {
-		if (!produtoRepositorio.existsById(id)) {
+	public Optional<ProdutoDto> obterProdutoPorId(Long idProduto) {
+		if (!produtoRepositorio.existsById(idProduto)) {
 			return Optional.empty();
 		}
-		return Optional.of(ProdutoDto.toDto(produtoRepositorio.findById(id).get()));
+		return Optional.of(ProdutoDto.toDto(produtoRepositorio.findById(idProduto).get()));
+	}
+	
+	public List<ProdutoDto> obterProdutoPorNome(String nome) {
+		List<Produto> produtos = produtoRepositorio.findByNomeContainingIgnoreCase(nome);
+		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
+	public List<ProdutoDto> obterProdutoPorIntervaloData(LocalDate dataInicio, LocalDate dataFinal) {
+		List<Produto> produtos = produtoRepositorio.findByDataCadastroBetween(dataInicio, dataFinal);
+		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
+	public List<ProdutoDto> obterProdutoPorIntervaloEstoque(int min, int max) {
+		List<Produto> produtos = produtoRepositorio.findByQtdEstoqueBetween(min, max);
+		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
+	public List<ProdutoDto> obterProdutoPorIntervaloValor(int min, int max) {
+		List<Produto> produtos = produtoRepositorio.findByValorUnitarioBetween(min, max);
+		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
+	}
+	
+	public List<ProdutoDto> obterProdutoPorCategoria(Long idCategoria) {
+		List<Produto> produtos = produtoRepositorio.findByCategoriaIdCategoria(idCategoria);
+		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
 
 	// UPDATE
-	public Optional<ProdutoDto> alterarProduto(Long id_produto, ProdutoDto produtoDto) {
+	public Optional<ProdutoDto> alterarProduto(Long id_produto, ProdutoCadastroDto produtoCadastroDto) {		
 		if (!produtoRepositorio.existsById(id_produto)) {
 			return Optional.empty();
 		}
-		Produto produtoEntity = produtoDto.toEntity();
-		produtoEntity.setIdProduto(id_produto);
+
+		Categoria categoria = categoriaRepositorio.findById(produtoCadastroDto.idCategoria())
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
+		
+		Produto produtoEntity = produtoRepositorio.findById(id_produto)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+
+		produtoEntity.setDataCadastro(produtoCadastroDto.dataCadastro());
+		produtoEntity.setDescricao(produtoCadastroDto.descricao());
+		produtoEntity.setImagem(produtoCadastroDto.imagem());
+		produtoEntity.setNome(produtoCadastroDto.nome());
+		produtoEntity.setQtdEstoque(produtoCadastroDto.qntEstoque());
+		produtoEntity.setValorUnitario(produtoCadastroDto.valorUnitario());
+		produtoEntity.setCategoria(categoria);
 		produtoRepositorio.save(produtoEntity);
 		return Optional.of(ProdutoDto.toDto(produtoEntity));
 	}
@@ -66,7 +103,8 @@ public class ProdutoService {
 		produtoRepositorio.deleteById(id_produto);
 		return true;
 	}
-	
+
+//ESTRUTURA DE POST E PUT
 //	{
 //	  "nome": "Capinhas personalizadas",
 //	  "descricao": "Capinhas com imagens personalizadas",

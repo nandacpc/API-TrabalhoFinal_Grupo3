@@ -63,18 +63,18 @@ public class PedidoService {
 		}		
 		
 		double valorTotal = itensPedido.stream()
-		        .mapToDouble(ItemPedido::getValorLiquido)
+		        .mapToDouble(i -> i.getValorLiquido())
 		        .sum();
 		novoPedido.setValorTotal(valorTotal);
 
 		novoPedido.setItens(itensPedido);
 		
-		Pedido pedidoEntity = pedidoRepositorio.save(novoPedido);
+		pedidoRepositorio.save(novoPedido);
 		String relatorio = gerarRelatorio(novoPedido.getIdPedido());
 		
 		emailService.enviarEmail(cliente.email(), "Novo pedido gerado", relatorio);
 		
-		return PedidoDto.toDto(pedidoEntity);		
+		return PedidoDto.toDto(novoPedido);		
 	}
 	
 	public String gerarRelatorio(Long idPedido) { //retornar string
@@ -121,6 +121,7 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente())
 				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		
 		pedidoEntity.setDataPedido(pedidoCadastroDto.dataPedido());
 		pedidoEntity.setStatusPedido(pedidoCadastroDto.statusPedido());
 		pedidoEntity.setCliente(cliente.toEntity());
