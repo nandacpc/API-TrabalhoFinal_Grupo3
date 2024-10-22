@@ -37,7 +37,6 @@ public class ProdutoController {
 	@GetMapping
 	public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
 		List<ProdutoDto> produtosDto = produtoServico.obterTodosProdutos();
-
 		if (produtosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}

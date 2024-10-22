@@ -30,6 +30,7 @@ public class Produto {
 	
 	@NotBlank(message = "O nome do produto não pode estar em branco.")
 	@Size(max = 100, message = "O nome do produto deve ter no máximo 100 caracteres.")
+	@Column(nullable=false, unique=true)
 	private String nome;
 	
     @Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")

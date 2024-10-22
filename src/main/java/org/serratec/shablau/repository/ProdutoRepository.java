@@ -10,4 +10,5 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByNomeContainingIgnoreCase(String nome);
     List<Produto> findByDataCadastro(LocalDate data_cadastro);
     List<Produto> findByQtdEstoqueIs(int qtd_estoque);
+	boolean existsByNomeIgnoreCase(String nome);
 }

@@ -25,7 +25,6 @@ public class ProdutoService {
 	public ProdutoDto salvarProduto(ProdutoCadastroDto produtoCadastroDto) {
 		CategoriaDto categoria = categoriaService.obterCategoriaPorId(produtoCadastroDto.idCategoria()).orElseThrow(
 				() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.idCategoria()));
-
 		Produto novoProduto = new Produto();
 		novoProduto.setNome(produtoCadastroDto.nome());
 		novoProduto.setDescricao(produtoCadastroDto.descricao());

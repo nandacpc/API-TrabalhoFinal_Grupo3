@@ -22,9 +22,11 @@ public class ClienteService {
 	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) throws Exception {
 		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(),
 				clienteCadastroDto.complemento());
-		if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
-            throw new Exception("CPF já cadastrado: " + clienteCadastroDto.cpf());
-        }
+		if (clienteRepositorio.existsByEmail(clienteCadastroDto.email())) {
+			throw new IllegalArgumentException("Email já cadastrado: " + clienteCadastroDto.email());
+		} if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
+			throw new IllegalArgumentException("CPF já cadastrado: " + clienteCadastroDto.cpf());
+		}
 		Cliente novoCliente = new Cliente();
 		novoCliente.setCpf(clienteCadastroDto.cpf());
 		novoCliente.setDataNascimento(clienteCadastroDto.dataNascimento());
