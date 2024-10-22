@@ -38,7 +38,7 @@ public class Produto {
 	private int qtdEstoque;
 	@Past(message = "A data de cadastro deve ser inferior ao dia de hoje.")
 	@Column(name = "data_cadastro")
-	@NotBlank(message = "Informe a data do cadastro.")
+	//@NotBlank(message = "Informe a data do cadastro.")
 	private LocalDate dataCadastro;
 	@Column(name = "valor_unitario")
 	private double valorUnitario;
