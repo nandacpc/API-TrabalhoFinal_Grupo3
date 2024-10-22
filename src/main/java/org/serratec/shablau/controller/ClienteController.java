@@ -34,7 +34,7 @@ public class ClienteController {
 	@Operation(summary = "Cadastra Clientes", description = "Coleta informação do cliente,cadastrado e salva")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) {
+	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) throws Exception {
 		return ResponseEntity.ok(clienteServico.salvarCliente(clienteCadastroDto));
 	}
 
@@ -42,7 +42,6 @@ public class ClienteController {
 	@GetMapping
 	public ResponseEntity<List<ClienteDto>> buscarTodosClientes() {
 		List<ClienteDto> clientesDto = clienteServico.obterTodosClientes();
-
 		if (clientesDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
@@ -56,7 +55,24 @@ public class ClienteController {
 			@ApiResponse(responseCode = "200", description = "Cliente encontrado!") })
 	public ResponseEntity<ClienteDto> buscarClientePorId(@PathVariable Long id_cliente) {
 		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorId(id_cliente);
-
+		if (!clienteDto.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(clienteDto.get());
+	}
+	
+	@GetMapping("/{nome}")
+	public ResponseEntity<List<ClienteDto>> buscarClientePorNome(@PathVariable String nome) {
+		List<ClienteDto> clientesDto = clienteServico.obterClientePorNome(nome);
+		if (!clientesDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(clientesDto);
+	}
+	
+	@GetMapping("/{cpf}")
+	public ResponseEntity<ClienteDto> buscarClientePorCpf(@PathVariable String cpf) {
+		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorCpf(cpf);
 		if (!clienteDto.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -66,10 +82,10 @@ public class ClienteController {
 	@PutMapping("/{id_cliente}")
 	@Operation(summary = "Altera cliente pelo id", description = "Com um determinado número de id,é possivel mudar as informações do cliente")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi Possivel alterar tal informação do cliente por esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Informação do Cliente foi alterado com sucesso!") })
-	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente,
-			@Valid @RequestBody ClienteDto clienteDto) {
+	@ApiResponse(responseCode = "404", description = "Não foi Possivel alterar tal informação do cliente por esse id,por favor verifique!"),
+	@ApiResponse(responseCode = "200", description = "Informação do Cliente foi alterado com sucesso!") })
+	public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long id_cliente, @Valid @RequestBody ClienteCadastroDto clienteDto) {
+
 		Optional<ClienteDto> clienteAlterado = clienteServico.alterarCliente(id_cliente, clienteDto);
 		if (!clienteAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -81,7 +97,7 @@ public class ClienteController {
 	@DeleteMapping("/{id_cliente}")
 	public ResponseEntity<String> deletarCliente(@PathVariable Long id_cliente) {
 		clienteServico.apagarCliente(id_cliente);
-		return ResponseEntity.ok("Cliente com ID " + id_cliente + "foi apagado com sucesso.");
+		return ResponseEntity.ok("O cliente com ID " + id_cliente + " foi excluído com sucesso.");
 	}
 
 }

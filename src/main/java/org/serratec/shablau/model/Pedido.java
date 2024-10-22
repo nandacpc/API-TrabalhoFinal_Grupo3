@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
@@ -30,25 +30,24 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idPedido;
 
-	@PastOrPresent
+	@PastOrPresent(message="A data do pedido não pode ser futura.")
 	@Column(name = "data_pedido")
-	@NotNull(message="Informe a data do pedido.")
 	private LocalDate dataPedido;
 	
-	@FutureOrPresent
+	@FutureOrPresent(message = "A data de envio deve ser hoje ou uma data futura.")
 	@Column(name = "data_envio")
 	private LocalDate dataEnvio;
 
-	@FutureOrPresent
+	@FutureOrPresent(message = "A data de entrega deve ser hoje ou uma data futura.")
 	@Column(name = "data_entrega")
 	private LocalDate dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status_pedido")
 	private StatusEnum statusPedido;
-
+	
+	@Min(value = 1, message = "O valor total deve ser maior que zero.")
 	@Column(name = "valor_total")
-	@NotNull(message="Informe o valor total do pedido.")
 	private double valorTotal;
 
 	@ManyToOne
@@ -122,11 +121,6 @@ public class Pedido {
 		itens.forEach(i -> i.setPedido(this));
 		this.itens = itens;
 	}
-//	public ItemPedido getItens() {
-//		return itens;
-//	}
-//	public void setItens(ItemPedido itens) {		
-//		this.itens = itens;
-//	}
+
 
 }

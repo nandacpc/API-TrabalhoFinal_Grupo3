@@ -34,21 +34,25 @@ public class ProdutoController {
 	@Operation(summary = "Cadastra Produto", description = "Coleta informação do Produto, cadastrado e salva")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoDto cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
-		return produtoServico.salvarProduto(produtoCadastroDto);
+	public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
+		return ResponseEntity.ok(produtoServico.salvarProduto(produtoCadastroDto));
 	}
 
 	@Operation(summary = "Traz todos os Produtos Cadastrados", description = "Traz a lista de Produtos Cadastrados")
 	@GetMapping
-	public List<ProdutoDto> buscarTodosProdutos() {
-		return produtoServico.obterTodosProdutos();
+	public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
+		List<ProdutoDto> produtosDto = produtoServico.obterTodosProdutos();
+		if (produtosDto.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+		return ResponseEntity.ok(produtosDto);
 	}
 
 	@GetMapping("/{id_produto}")
 	@Operation(summary = "Retorna um Produto pelo id", description = "Dado um determinado número de id, será retornado um produto com suas informações gerais")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi encontrado um produto com esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Produto encontrado!") })
+		@ApiResponse(responseCode = "404", description = "Não foi encontrado um produto com esse id,por favor verifique!"),
+		@ApiResponse(responseCode = "200", description = "Produto encontrado!") })
 	public ResponseEntity<ProdutoDto> buscarProdutoPorId(@PathVariable Long id_produto) {
 		Optional<ProdutoDto> produtoDto = produtoServico.obterProdutoPorId(id_produto);
 
@@ -61,8 +65,8 @@ public class ProdutoController {
 	@PutMapping("/{id_produto}")
 	@Operation(summary = "Altera um Produto pelo id", description = "Dado um determinado número de id,é Possivel alterar tal produto , e suas informações")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal produto por esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Produto alterado!") })
+		@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal produto por esse id,por favor verifique!"),
+		@ApiResponse(responseCode = "200", description = "Produto alterado!") })
 	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto,
 			@Valid @RequestBody ProdutoDto produtoDto) {
 		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoDto);
@@ -75,8 +79,8 @@ public class ProdutoController {
 	@DeleteMapping("/{id_produto}")
 	@Operation(summary = "Deleta um Produto pelo id", description = "Dado um determinado número de id,é Possivel deletar tal produto , e suas informações")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal produto por esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Produto Deletado com sucesso!") })
+		@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal produto por esse id,por favor verifique!"),
+		@ApiResponse(responseCode = "200", description = "Produto Deletado com sucesso!") })
 	public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
 		if (!produtoServico.apagarProduto(id_produto)) {
 			return ResponseEntity.notFound().build();

@@ -10,7 +10,6 @@ import org.serratec.shablau.model.Cliente;
 import org.serratec.shablau.model.Endereco;
 import org.serratec.shablau.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,15 +18,15 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepositorio;
 
-	// CREATE
-	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) {
+	//CREATE
+	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) throws Exception {
 		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(),
 				clienteCadastroDto.complemento());
-
-		if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
-			throw new DuplicateKeyException("CPF já cadastrado: " + clienteCadastroDto.cpf());
+		if (clienteRepositorio.existsByEmail(clienteCadastroDto.email())) {
+			throw new IllegalArgumentException("Email já cadastrado: " + clienteCadastroDto.email());
+		} if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
+			throw new IllegalArgumentException("CPF já cadastrado: " + clienteCadastroDto.cpf());
 		}
-
 		Cliente novoCliente = new Cliente();
 		novoCliente.setCpf(clienteCadastroDto.cpf());
 		novoCliente.setDataNascimento(clienteCadastroDto.dataNascimento());
@@ -35,12 +34,10 @@ public class ClienteService {
 		novoCliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
 		novoCliente.setTelefone(clienteCadastroDto.telefone());
 		novoCliente.setEndereco(endereco);
-		
-		
 		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
 
-	// READ
+	//READ
 	public List<ClienteDto> obterTodosClientes() {
 		return clienteRepositorio.findAll().stream().map(c -> ClienteDto.toDto(c)).toList();
 	}
@@ -50,9 +47,9 @@ public class ClienteService {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");
 		}
 		return Optional.of(ClienteDto.toDto(clienteRepositorio.findById(id).get()));
-
 	}
-
+	
+	//QUERY DERIVED
 	public List<ClienteDto> obterClientePorNome(String nome) {
 		List<Cliente> clientes = clienteRepositorio.findByNomeCompletoContainingIgnoreCase(nome);
 		return clientes.stream().map(c -> ClienteDto.toDto(c)).toList();
@@ -62,18 +59,27 @@ public class ClienteService {
 		return Optional.of(ClienteDto.toDto(clienteRepositorio.findByCpf(cpf)));
 	}
 
+
 	// UPDATE
-	public Optional<ClienteDto> alterarCliente(Long id, ClienteDto clienteDto) {
+	public Optional<ClienteDto> alterarCliente(Long id, ClienteCadastroDto clienteCadastroDto) {
 		if (!clienteRepositorio.existsById(id)) {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");
 		}
-		Cliente clienteAlterado = clienteDto.toEntity();
-		clienteAlterado.setIdCliente(id);
-		clienteRepositorio.save(clienteAlterado);
-		return Optional.of(ClienteDto.toDto(clienteAlterado));
+		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(),
+				clienteCadastroDto.complemento());
+		Cliente cliente = clienteRepositorio.findById(id)
+				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		cliente.setCpf(clienteCadastroDto.cpf());
+		cliente.setDataNascimento(clienteCadastroDto.dataNascimento());
+		cliente.setEmail(clienteCadastroDto.email());
+		cliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
+		cliente.setTelefone(clienteCadastroDto.telefone());
+		cliente.setEndereco(endereco);
+		
+		return Optional.of(ClienteDto.toDto(clienteRepositorio.save(cliente)));
 	}
 
-	// DELETE
+	//DELETE
 	public void apagarCliente(Long id) {
 		if (!clienteRepositorio.existsById(id)) {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");

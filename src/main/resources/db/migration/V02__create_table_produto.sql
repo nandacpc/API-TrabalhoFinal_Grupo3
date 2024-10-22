@@ -1,7 +1,7 @@
 CREATE TABLE produtos
 (
     id_produto serial primary key,
-    nome varchar(100) not null,
+    nome varchar(100) not null unique,
     descricao varchar(200),
     qnt_estoque int not null,
     data_cadastro date not null,

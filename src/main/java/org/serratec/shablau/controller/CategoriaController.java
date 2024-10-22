@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/shablau/categorias")
+@RequestMapping(path = "/categorias")
 public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaServico;
@@ -35,7 +35,7 @@ public class CategoriaController {
 	public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
 		return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
 	}
-
+	
 	@Operation(summary = "Traz todas as Categorias Cadastradas", description = "Traz a lista de Categorias Cadastradas")
 	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
@@ -49,8 +49,8 @@ public class CategoriaController {
 	@GetMapping("/{id_categoria}")
 	@Operation(summary = "Retorna uma categoria pelo id", description = "Dado um determinado número de id, será retornado uma categoria com suas informações gerais")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi encontrado uma categoria com esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Categoria encontrada!") })
+	@ApiResponse(responseCode = "404", description = "Não foi encontrado uma categoria com esse id,por favor verifique!"),
+	@ApiResponse(responseCode = "200", description = "Categoria encontrada!") })
 	public ResponseEntity<CategoriaDto> buscarCategoriaPorId(@PathVariable Long id_categoria) {
 		Optional<CategoriaDto> categoriaDto = categoriaServico.obterCategoriaPorId(id_categoria);
 
@@ -63,8 +63,8 @@ public class CategoriaController {
 	@PutMapping("/{id_categoria}")
 	@Operation(summary = "Altera uma categoria pelo id", description = "Dado um determinado número de id,é Possivel alterar tal categoria , e suas informações")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal categoria por esse id,por favor verifique!"),
-			@ApiResponse(responseCode = "200", description = "Categoria alterada!") })
+	@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal categoria por esse id,por favor verifique!"),
+	@ApiResponse(responseCode = "200", description = "Categoria alterada!") })
 	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria,
 			@Valid @RequestBody CategoriaDto categoriaDto) {
 		Optional<CategoriaDto> categoriaAlterada = categoriaServico.alterarCategoria(id_categoria, categoriaDto);
@@ -77,7 +77,7 @@ public class CategoriaController {
 	@DeleteMapping("/{id_categoria}")
 	@Operation(summary = "Deleta uma categoria pelo id", description = "Dado um determinado número de id,é Possivel deletar tal categoria , e suas informações")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal categoria por esse id,por favor verifique!") })
+	@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal categoria por esse id,por favor verifique!") })
 	public ResponseEntity<String> deletarCategoria(@PathVariable Long id_categoria) {
 		categoriaServico.apagarCategoria(id_categoria);
 		return ResponseEntity.ok("A categoria com ID " + id_categoria + " foi apagado com sucesso.");

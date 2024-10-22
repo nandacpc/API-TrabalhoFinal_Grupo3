@@ -21,13 +21,15 @@ public class Categoria {
 	@Column(name = "id_categoria")
 	private Long idCategoria;
 	
-	@NotBlank(message = "Informe o nome.")
-	@Size(max = 50, message = "O nome deve conter no máximo 50 caracteres.")
+	@NotBlank(message = "O nome não pode estar em branco. Informe um nome válido.")
+	@Size(max = 50, message = "O nome deve ter no máximo 50 caracteres.")
+	@Column(nullable=false, unique=true)
 	private String nome;
 	
-	@NotBlank(message = "Informe a descrição.")
-	@Size(max = 200, message = "A descrição deve conter no máximo 200 caracteres.")
+	@NotBlank(message = "A descrição não pode estar em branco. Informe uma descrição válida.")
+	@Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")
 	private String descricao;
+	
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	private List<Produto> produtos;
 
