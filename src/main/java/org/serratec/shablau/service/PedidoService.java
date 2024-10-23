@@ -34,7 +34,6 @@ public class PedidoService {
 	@Autowired
 	private EmailService emailService;
 
-	// CREATE
 	public PedidoDto salvarPedido(PedidoCadastroDto pedidoCadastroDto) {
 		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente()).orElseThrow(
 				() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.idCliente()));
@@ -86,17 +85,6 @@ public class PedidoService {
 		return relatorio.toString();
 	}
 
-//public static String gerarHtmlRelatorio(RelatorioPedidoDTO relatorio) {
-//        
-//		StringBuilder html = new StringBuilder();
-//
-//        // Cabeçalho do HTML
-//        html.append("<html><head><title>Relatório de Pedido</title></head><body>");
-//
-//        // Título do relatório
-//        html.append("<h1>Relatório de Pedido</h1>");
-
-	// READ
 	public List<PedidoDto> obterTodosPedidos() {
 		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
@@ -107,23 +95,27 @@ public class PedidoService {
 		}
 		return Optional.of(PedidoDto.toDto(pedidoRepositorio.findById(id).get()));
 	}
+
 	public List<PedidoDto> obterPedidoPorStatus(StatusEnum status) {
 		List<Pedido> pedido = pedidoRepositorio.findByStatusPedido(status);
 		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
+
 	public List<PedidoDto> obterPedidoPorDataPedido(LocalDate dataPedido) {
 		List<Pedido> pedido = pedidoRepositorio.findByDataPedido(dataPedido);
 		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
+
 	public List<PedidoDto> obterPedidoPorDataEntrega(LocalDate dataEntrega) {
 		List<Pedido> pedido = pedidoRepositorio.findByDataEntrega(dataEntrega);
 		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
+
 	public List<PedidoDto> obterPedidoPorDataEnvio(LocalDate dataEnvio) {
 		List<Pedido> pedido = pedidoRepositorio.findByDataEnvio(dataEnvio);
 		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
-	
+
 	public Optional<PedidoDto> alterarDadosPedido(Long idPedido, PedidoCadastroDto pedidoCadastroDto) {
 		if (!pedidoRepositorio.existsById(idPedido)) {
 			return Optional.empty();
@@ -160,13 +152,12 @@ public class PedidoService {
 		return Optional.of(PedidoDto.toDto(pedidoEntity));
 	}
 
-	// DELETE
 	public boolean apagarPedido(Long idPedido) {
 		if (!pedidoRepositorio.existsById(idPedido)) {
 			throw new ResourceNotFoundException("Pedido com ID " + idPedido + " não encontrado.");
 		}
 		pedidoRepositorio.deleteById(idPedido);
-		return true; // Retorna true após a exclusão
+		return true; 
 	}
 
 	// json cadastro pedido

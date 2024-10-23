@@ -20,16 +20,16 @@ public class Categoria {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_categoria")
 	private Long idCategoria;
-	
+
 	@NotBlank(message = "O nome não pode estar em branco. Informe um nome válido.")
 	@Size(max = 50, message = "O nome deve ter no máximo 50 caracteres.")
-	@Column(nullable=false, unique=true)
+	@Column(nullable = false, unique = true)
 	private String nome;
-	
+
 	@NotBlank(message = "A descrição não pode estar em branco. Informe uma descrição válida.")
 	@Size(max = 200, message = "A descrição deve ter no máximo 200 caracteres.")
 	private String descricao;
-	
+
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	private List<Produto> produtos;
 

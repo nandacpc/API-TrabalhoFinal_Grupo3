@@ -32,14 +32,14 @@ public class PedidoController {
 	@Autowired
 	private PedidoService pedidoServico;
 
-	@Operation(summary = "Cadastra pedido", description = "Coleta informação do pedido, cadastrado e salva")
+	@Operation(summary = "Cadastra um novo pedido", description = "Recebe as informações do pedido, realiza o cadastro no sistema e armazena os dados.")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<PedidoDto> cadastrarPedido(@Valid @RequestBody PedidoCadastroDto pedidoCadastroDto) {
 		return ResponseEntity.ok(pedidoServico.salvarPedido(pedidoCadastroDto));
 	}
 
-	@Operation(summary = "Traz todos os pedidos cadastrados", description = "Traz a lista de pedidos cadastrados")
+	@Operation(summary = "Lista todos os pedidos cadastrados", description = "Retorna uma lista com todos os pedidos registrados no sistema.")
 	@GetMapping
 	public ResponseEntity<List<PedidoDto>> buscarTodosPedidos() {
 		List<PedidoDto> pedidosDto = pedidoServico.obterTodosPedidos();
@@ -49,17 +49,18 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidosDto);
 	}
 
-	@Operation(summary = "Traz o relatorio", description = "Traz relatorio pelo id do pedido")
+	@Operation(summary = "Gera o relatório de um pedido", description = "Gera e exibe um relatório detalhado com as informações do pedido, baseado no ID fornecido.")
 	@GetMapping("/relatorio/{idPedido}")
 	public String exibirRelatorio(@PathVariable Long idPedido) {
 		return pedidoServico.gerarRelatorio(idPedido);
 	}
-	
+
 	@GetMapping("/{id_pedido}")
-	@Operation(summary = "Retorna um pedido pelo id", description = "Dado um determinado número de id, será retornado um pedido com suas informações gerais")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "404", description = "Não foi encontrado um pedido com esse id, por favor verifique!"),
-		@ApiResponse(responseCode = "200", description = "Pedido encontrado!") })
+	@Operation(summary = "Consulta um pedido pelo ID", description = "Retorna as informações detalhadas de um pedido específico, com base no ID fornecido.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedido encontrado!"),
+			@ApiResponse(responseCode = "404", description = "Pedido não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<PedidoDto> buscarPedidoPorId(@PathVariable Long id_pedido) {
 		Optional<PedidoDto> pedidoDto = pedidoServico.obterPedidoPorId(id_pedido);
 
@@ -69,52 +70,54 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidoDto.get());
 	}
 
-	@Operation(summary = "Buscar pedido pelo seu status.", description = "Buscar pedidos de acordo com seu status.")
+	@Operation(summary = "Consulta pedidos pelo status", description = "Busca e retorna uma lista de pedidos filtrados pelo status informado.")
 	@GetMapping("/status/{status}")
-		public ResponseEntity<List<PedidoDto>> buscarPedidoPorStatus(@PathVariable String status) {
+	public ResponseEntity<List<PedidoDto>> buscarPedidoPorStatus(@PathVariable String status) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorStatus(StatusEnum.valueOf(status.toUpperCase()));
-		if(pedidosDto.isEmpty()) {
+		if (pedidosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(pedidosDto);
-	}	
-	
-	@Operation(summary = "Buscar pedido pelo seu status.", description = "Buscar pedidos de acordo com seu status.")
-	@GetMapping("/datas/pedido/{dataPedido}")
-	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataPedido(@PathVariable LocalDate dataPedido){
+	}
+
+	@Operation(summary = "Consulta pedidos pela data de criação", description = "Retorna uma lista de pedidos feitos na data especificada.")
+	@GetMapping("/datas/pedidos/{dataPedido}")
+	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataPedido(@PathVariable LocalDate dataPedido) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataPedido(dataPedido);
-		if(pedidosDto.isEmpty()) {
+		if (pedidosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(pedidosDto);
-	} 
-	
-	@Operation(summary = "Buscar pedido por data de entrega.", description = "Busca pedidos por com mesma data de entrega.")
+	}
+
+	@Operation(summary = "Consulta pedidos pela data de entrega", description = "Busca pedidos que possuem a mesma data de entrega.")
 	@GetMapping("/datas/entrega/{dataEntrega}")
-	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEntrega(@PathVariable LocalDate dataEntrega){
+	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEntrega(@PathVariable LocalDate dataEntrega) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataEntrega(dataEntrega);
-		if(pedidosDto.isEmpty()) {
+		if (pedidosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(pedidosDto);
-	}	
-	
-	@Operation(summary = "Buscar pedido por data de entrega.", description = "Busca pedidos por com mesma data de entrega.")
+	}
+
+	@Operation(summary = "Consulta pedidos pela data de envio", description = "Retorna pedidos de acordo com a data em que foram enviados.")
 	@GetMapping("/datas/envio/{dataEnvio}")
-	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEnvio(@PathVariable LocalDate dataEnvio){
+	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEnvio(@PathVariable LocalDate dataEnvio) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataEnvio(dataEnvio);
-		if(pedidosDto.isEmpty()) {
+		if (pedidosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(pedidosDto);
-	}	
-	
+	}
+
 	@PutMapping("/{id_pedido}")
-	@Operation(summary = "Altera um pedido pelo id", description = "Dado um determinado número de id, é possivel alterar um pedido com suas informações gerais")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal pedido com esse id, por favor verifique!"),
-		@ApiResponse(responseCode = "200", description = "Pedido alterado!") })
-	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido, @Valid @RequestBody PedidoCadastroDto pedidoDto) {
+	@Operation(summary = "Altera um pedido pelo ID", description = "Atualiza os dados de um pedido existente, com base no ID fornecido.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedido alterado com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Pedido não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
+	public ResponseEntity<PedidoDto> modificarPedido(@PathVariable Long id_pedido,
+			@Valid @RequestBody PedidoCadastroDto pedidoDto) {
 		Optional<PedidoDto> pedidoAlterado = pedidoServico.alterarDadosPedido(id_pedido, pedidoDto);
 		if (!pedidoAlterado.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -123,10 +126,11 @@ public class PedidoController {
 	}
 
 	@DeleteMapping("/{id_pedido}")
-	@Operation(summary = "Deleta um pedido pelo id", description = "Dado um determinado número de id, é possivel deletar tal pedido e suas informações")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal pedido por esse id, por favor verifique!"),
-		@ApiResponse(responseCode = "200", description = "Pedido deletado com sucesso!") })
+	@Operation(summary = "Remove um pedido pelo ID", description = "Exclui um pedido específico e suas informações, com base no ID informado.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedido removido com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Pedido não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<Void> deletarPedido(@PathVariable Long id_pedido) {
 		if (!pedidoServico.apagarPedido(id_pedido)) {
 			return ResponseEntity.notFound().build();

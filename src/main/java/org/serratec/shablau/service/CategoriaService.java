@@ -16,14 +16,13 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepositorio;
 
+	public CategoriaDto salvarCategoria(CategoriaDto categoriaDto) {
+		if (categoriaDto.nome().isBlank()) {
+			return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
+		}
+		throw new ResourceNotFoundException("A categoria já existe.");
+	}
 
-    public CategoriaDto salvarCategoria(CategoriaDto categoriaDto) {
-        if(categoriaDto.nome().isBlank()) {
-            return CategoriaDto.toDto(categoriaRepositorio.save(categoriaDto.toEntity()));
-        }
-        throw new ResourceNotFoundException("A categoria já existe.");
-    }
-    
 	public List<CategoriaDto> obterTodasCategorias() {
 		return categoriaRepositorio.findAll().stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
@@ -35,18 +34,16 @@ public class CategoriaService {
 		return Optional.of(CategoriaDto.toDto(categoriaRepositorio.findById(id_categoria).get()));
 	}
 
-	
-	public List<CategoriaDto> obterCategoriaPorNome(String nome){
+	public List<CategoriaDto> obterCategoriaPorNome(String nome) {
 		List<Categoria> categoria = categoriaRepositorio.findByNomeContainingIgnoreCase(nome);
 		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
-	
-	public List<CategoriaDto> obterCategoriaPorDescricao(String palavra){
+
+	public List<CategoriaDto> obterCategoriaPorDescricao(String palavra) {
 		List<Categoria> categoria = categoriaRepositorio.findByDescricaoContainingIgnoreCase(palavra);
 		return categoria.stream().map(c -> CategoriaDto.toDto(c)).toList();
 	}
 
-	// UPDATE
 	public Optional<CategoriaDto> alterarCategoria(Long id_categoria, CategoriaDto categoriaDto) {
 		if (!categoriaRepositorio.existsById(id_categoria)) {
 			throw new ResourceNotFoundException("A categoria com ID " + id_categoria + " não foi encontrado.");

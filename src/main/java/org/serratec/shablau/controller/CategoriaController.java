@@ -29,14 +29,14 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaServico;
 
-	@Operation(summary = "Cadastra Categoria", description = "Coleta informação da categoria, cadastrada e salva")
+	@Operation(summary = "Cadastra uma nova categoria", description = "Recebe as informações de uma categoria, realiza o cadastro no sistema e armazena os dados.")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
 		return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
 	}
-	
-	@Operation(summary = "Traz todas as Categorias Cadastradas", description = "Traz a lista de Categorias Cadastradas")
+
+	@Operation(summary = "Lista todas as categorias cadastradas", description = "Retorna uma lista com todas as categorias cadastradas.")
 	@GetMapping
 	public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterTodasCategorias();
@@ -48,9 +48,10 @@ public class CategoriaController {
 
 	@GetMapping("/{id_categoria}")
 	@Operation(summary = "Retorna uma categoria pelo id", description = "Dado um determinado número de id, será retornado uma categoria com suas informações gerais")
-	@ApiResponses(value = {
-	@ApiResponse(responseCode = "404", description = "Não foi encontrado uma categoria com esse id,por favor verifique!"),
-	@ApiResponse(responseCode = "200", description = "Categoria encontrada!") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categoria encontrada!"),
+			@ApiResponse(responseCode = "404", description = "Categoria não encontrada. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<CategoriaDto> buscarCategoriaPorId(@PathVariable Long id_categoria) {
 		Optional<CategoriaDto> categoriaDto = categoriaServico.obterCategoriaPorId(id_categoria);
 
@@ -59,7 +60,8 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriaDto.get());
 	}
-  @GetMapping("/descricao/{palavra}")
+
+	@GetMapping("/descricao/{palavra}")
 	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
 		if (categoriasDto.isEmpty()) {
@@ -67,7 +69,9 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriasDto);
 	}
-  @GetMapping("/nome/{nome}")
+
+	@Operation(summary = "Consulta categoria por nome", description = "Busca categoriaa pelo nome registrado.")
+	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorNome(@PathVariable String nome) {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorNome(nome);
 		if (categoriasDto.isEmpty()) {
@@ -77,10 +81,11 @@ public class CategoriaController {
 	}
 
 	@PutMapping("/{id_categoria}")
-	@Operation(summary = "Altera uma categoria pelo id", description = "Dado um determinado número de id,é Possivel alterar tal categoria , e suas informações")
-	@ApiResponses(value = {
-	@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal categoria por esse id,por favor verifique!"),
-	@ApiResponse(responseCode = "200", description = "Categoria alterada!") })
+	@Operation(summary = "Altera uma categoria pelo ID", description = "Atualiza os dados de uma categoria existente, com base no ID fornecido.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categoria alterada com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Categoria não encontrada. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<CategoriaDto> modificarCategoria(@PathVariable Long id_categoria,
 			@Valid @RequestBody CategoriaDto categoriaDto) {
 		Optional<CategoriaDto> categoriaAlterada = categoriaServico.alterarCategoria(id_categoria, categoriaDto);
@@ -89,11 +94,13 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriaAlterada.get());
 	}
-
+	
 	@DeleteMapping("/{id_categoria}")
-	@Operation(summary = "Deleta uma categoria pelo id", description = "Dado um determinado número de id,é Possivel deletar tal categoria , e suas informações")
-	@ApiResponses(value = {
-	@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal categoria por esse id,por favor verifique!") })
+	@Operation(summary = "Remove uma categoria pelo ID", description = "Exclui uma categoria específica e suas informações, com base no ID informado.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categoria removida com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Categoria não encontrada. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<String> deletarCategoria(@PathVariable Long id_categoria) {
 		categoriaServico.apagarCategoria(id_categoria);
 		return ResponseEntity.ok("A categoria com ID " + id_categoria + " foi apagado com sucesso.");

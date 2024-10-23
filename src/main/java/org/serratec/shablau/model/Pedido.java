@@ -26,14 +26,14 @@ import jakarta.validation.constraints.PastOrPresent;
 public class Pedido {
 
 	@Id
-	@Column(name="id_pedido")
+	@Column(name = "id_pedido")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idPedido;
 
-	@PastOrPresent(message="A data do pedido não pode ser futura.")
+	@PastOrPresent(message = "A data do pedido não pode ser futura.")
 	@Column(name = "data_pedido")
 	private LocalDate dataPedido;
-	
+
 	@FutureOrPresent(message = "A data de envio deve ser hoje ou uma data futura.")
 	@Column(name = "data_envio")
 	private LocalDate dataEnvio;
@@ -41,11 +41,11 @@ public class Pedido {
 	@FutureOrPresent(message = "A data de entrega deve ser hoje ou uma data futura.")
 	@Column(name = "data_entrega")
 	private LocalDate dataEntrega;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status_pedido")
 	private StatusEnum statusPedido;
-	
+
 	@Min(value = 1, message = "O valor total deve ser maior que zero.")
 	@Column(name = "valor_total")
 	private double valorTotal;
@@ -57,10 +57,11 @@ public class Pedido {
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<ItemPedido> itens;
-	
+
 	public Long getIdPedido() {
 		return idPedido;
 	}
+
 	public void setIdPedido(Long id_pedido) {
 		this.idPedido = id_pedido;
 	}
@@ -121,6 +122,5 @@ public class Pedido {
 		itens.forEach(i -> i.setPedido(this));
 		this.itens = itens;
 	}
-
 
 }

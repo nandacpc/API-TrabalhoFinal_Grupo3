@@ -2,11 +2,7 @@ package org.serratec.shablau.dto;
 
 import org.serratec.shablau.model.Categoria;
 
-public record CategoriaDto(
-		Long idCategoria, 
-		String nome, 
-		String descricao
-		) {
+public record CategoriaDto(Long idCategoria, String nome, String descricao) {
 
 	public Categoria toEntity() {
 		Categoria categoria = new Categoria();

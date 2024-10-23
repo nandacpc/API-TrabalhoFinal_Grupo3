@@ -18,13 +18,13 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepositorio;
 
-	//CREATE
 	public ClienteDto salvarCliente(ClienteCadastroDto clienteCadastroDto) throws Exception {
 		Endereco endereco = ViaCepService.preencherEnderecoViaCep(clienteCadastroDto.cep(), clienteCadastroDto.numero(),
 				clienteCadastroDto.complemento());
 		if (clienteRepositorio.existsByEmail(clienteCadastroDto.email())) {
 			throw new IllegalArgumentException("Email já cadastrado: " + clienteCadastroDto.email());
-		} if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
+		}
+		if (clienteRepositorio.existsByCpf(clienteCadastroDto.cpf())) {
 			throw new IllegalArgumentException("CPF já cadastrado: " + clienteCadastroDto.cpf());
 		}
 		Cliente novoCliente = new Cliente();
@@ -37,7 +37,6 @@ public class ClienteService {
 		return ClienteDto.toDto(clienteRepositorio.save(novoCliente));
 	}
 
-	//READ
 	public List<ClienteDto> obterTodosClientes() {
 		return clienteRepositorio.findAll().stream().map(c -> ClienteDto.toDto(c)).toList();
 	}
@@ -48,8 +47,7 @@ public class ClienteService {
 		}
 		return Optional.of(ClienteDto.toDto(clienteRepositorio.findById(id).get()));
 	}
-	
-	//QUERY DERIVED
+
 	public List<ClienteDto> obterClientePorNome(String nome) {
 		List<Cliente> clientes = clienteRepositorio.findByNomeCompletoContainingIgnoreCase(nome);
 		return clientes.stream().map(c -> ClienteDto.toDto(c)).toList();
@@ -59,8 +57,6 @@ public class ClienteService {
 		return Optional.of(ClienteDto.toDto(clienteRepositorio.findByCpf(cpf)));
 	}
 
-
-	// UPDATE
 	public Optional<ClienteDto> alterarCliente(Long id, ClienteCadastroDto clienteCadastroDto) {
 		if (!clienteRepositorio.existsById(id)) {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");
@@ -75,11 +71,10 @@ public class ClienteService {
 		cliente.setNomeCompleto(clienteCadastroDto.nomeCompleto());
 		cliente.setTelefone(clienteCadastroDto.telefone());
 		cliente.setEndereco(endereco);
-		
+
 		return Optional.of(ClienteDto.toDto(clienteRepositorio.save(cliente)));
 	}
 
-	//DELETE
 	public void apagarCliente(Long id) {
 		if (!clienteRepositorio.existsById(id)) {
 			throw new ResourceNotFoundException("Cliente com ID " + id + " não encontrado.");

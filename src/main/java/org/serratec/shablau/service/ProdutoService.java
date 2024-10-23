@@ -18,23 +18,22 @@ public class ProdutoService {
 
 	@Autowired
 	private ProdutoRepository produtoRepositorio;
-	
-	@Autowired CategoriaRepository categoriaRepositorio;
-	
-	// CREATE
+
+	@Autowired
+	CategoriaRepository categoriaRepositorio;
+
 	public ProdutoDto salvarProduto(ProdutoCadastroDto produtoCadastroDto) {
-		Categoria categoria = categoriaRepositorio.findById(produtoCadastroDto.idCategoria())
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.idCategoria()));		
+		Categoria categoria = categoriaRepositorio.findById(produtoCadastroDto.idCategoria()).orElseThrow(
+				() -> new RuntimeException("Categoria não encontrada com o ID: " + produtoCadastroDto.idCategoria()));
 		Produto novoProduto = new Produto();
 		novoProduto.setNome(produtoCadastroDto.nome());
 		novoProduto.setDescricao(produtoCadastroDto.descricao());
 		novoProduto.setDataCadastro(produtoCadastroDto.dataCadastro());
 		novoProduto.setQtdEstoque(produtoCadastroDto.qntEstoque());
-		novoProduto.setCategoria(categoria);		
+		novoProduto.setCategoria(categoria);
 		return ProdutoDto.toDto(produtoRepositorio.save(novoProduto));
-	}	
+	}
 
-	// READ
 	public List<ProdutoDto> obterTodosProdutos() {
 		return produtoRepositorio.findAll().stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
@@ -45,43 +44,42 @@ public class ProdutoService {
 		}
 		return Optional.of(ProdutoDto.toDto(produtoRepositorio.findById(idProduto).get()));
 	}
-	
+
 	public List<ProdutoDto> obterProdutoPorNome(String nome) {
 		List<Produto> produtos = produtoRepositorio.findByNomeContainingIgnoreCase(nome);
 		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
-	
+
 	public List<ProdutoDto> obterProdutoPorIntervaloData(LocalDate dataInicio, LocalDate dataFinal) {
 		List<Produto> produtos = produtoRepositorio.findByDataCadastroBetween(dataInicio, dataFinal);
 		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
-	
+
 	public List<ProdutoDto> obterProdutoPorIntervaloEstoque(int min, int max) {
 		List<Produto> produtos = produtoRepositorio.findByQtdEstoqueBetween(min, max);
 		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
-	
+
 	public List<ProdutoDto> obterProdutoPorIntervaloValor(int min, int max) {
 		List<Produto> produtos = produtoRepositorio.findByValorUnitarioBetween(min, max);
 		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
-	
+
 	public List<ProdutoDto> obterProdutoPorCategoria(Long idCategoria) {
 		List<Produto> produtos = produtoRepositorio.findByCategoriaIdCategoria(idCategoria);
 		return produtos.stream().map(p -> ProdutoDto.toDto(p)).toList();
 	}
 
-	// UPDATE
-	public Optional<ProdutoDto> alterarProduto(Long id_produto, ProdutoCadastroDto produtoCadastroDto) {		
+	public Optional<ProdutoDto> alterarProduto(Long id_produto, ProdutoCadastroDto produtoCadastroDto) {
 		if (!produtoRepositorio.existsById(id_produto)) {
 			throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
 		}
 
 		Categoria categoria = categoriaRepositorio.findById(produtoCadastroDto.idCategoria())
 				.orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
-		
+
 		Produto produtoEntity = produtoRepositorio.findById(id_produto)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+				.orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
 		produtoEntity.setDataCadastro(produtoCadastroDto.dataCadastro());
 		produtoEntity.setDescricao(produtoCadastroDto.descricao());
@@ -93,19 +91,15 @@ public class ProdutoService {
 		produtoRepositorio.save(produtoEntity);
 		return Optional.of(ProdutoDto.toDto(produtoEntity));
 	}
-	
-	
-	
+
 	public boolean apagarProduto(Long id_produto) {
-	    if (!produtoRepositorio.existsById(id_produto)) {
-	        throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
-	    }
-	    produtoRepositorio.deleteById(id_produto);
-	    return true; // Retorne true se a exclusão foi bem-sucedida
+		if (!produtoRepositorio.existsById(id_produto)) {
+			throw new ResourceNotFoundException("Produto com ID " + id_produto + " não encontrado.");
+		}
+		produtoRepositorio.deleteById(id_produto);
+		return true;
 	}
 
-
-//ESTRUTURA DE POST E PUT
 //	{
 //	  "nome": "Capinhas personalizadas",
 //	  "descricao": "Capinhas com imagens personalizadas",

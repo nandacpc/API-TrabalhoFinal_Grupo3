@@ -32,16 +32,15 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoServico;
 
-	@Operation(summary = "Cadastra produto", description = "Coleta informações do produto e salva")
-	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
+	@Operation(summary = "Cadastra um novo produto", description = "Recebe as informações do produto, realiza o cadastro no sistema e armazena os dados.")
+	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
 		return ResponseEntity.ok(produtoServico.salvarProduto(produtoCadastroDto));
 	}
 
-	@Operation(summary = "Traz todos os produtos cadastrados", 
-			description = "Traz a lista de produtos cadastrados")
 	@GetMapping
+	@Operation(summary = "Lista todos os produtos cadastrados", description = "Retorna uma lista com todos os produtos cadastrados no sistema.")
 	public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
 		List<ProdutoDto> produtosDto = produtoServico.obterTodosProdutos();
 		if (produtosDto.isEmpty()) {
@@ -51,11 +50,11 @@ public class ProdutoController {
 	}
 
 	@GetMapping("/{id_produto}")
-	@Operation(summary = "Retorna um produto pelo id", 
-	description = "Dado um determinado número de id, será retornado um produto com suas informações gerais")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "404", description = "Não foi encontrado um produto com esse id,por favor verifique!"),
-		@ApiResponse(responseCode = "200", description = "Produto encontrado!") })
+	@Operation(summary = "Retorna um produto pelo ID", description = "Retorna as informações detalhadas de um produto específico, com base no ID fornecido.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto encontrado!"),
+			@ApiResponse(responseCode = "404", description = "Produto não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<ProdutoDto> buscarProdutoPorId(@PathVariable Long id_produto) {
 		Optional<ProdutoDto> produtoDto = produtoServico.obterProdutoPorId(id_produto);
 
@@ -64,7 +63,8 @@ public class ProdutoController {
 		}
 		return ResponseEntity.ok(produtoDto.get());
 	}
-	
+
+	@Operation(summary = "Buscar produtos pelo nome", description = "Busca produtos que correspondem ao nome informado.")
 	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorNome(@PathVariable String nome) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorNome(nome);
@@ -73,34 +73,41 @@ public class ProdutoController {
 		}
 		return ResponseEntity.ok(produtosDto);
 	}
-	
+
+	@Operation(summary = "Buscar produtos por intervalo de datas", description = "Busca produtos com base na data de criação ou atualização entre as datas informadas.")
 	@GetMapping("/data/{data_inicio}/{data_final}")
-	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloData(@PathVariable LocalDate data_inicio, @PathVariable LocalDate data_final) {
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloData(@PathVariable LocalDate data_inicio,
+			@PathVariable LocalDate data_final) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloData(data_inicio, data_final);
 		if (produtosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(produtosDto);
-	}	
-	
+	}
+
+	@Operation(summary = "Buscar produtos por intervalo de quantidade em estoque", description = "Busca produtos cujo estoque esteja entre os valores mínimo e máximo especificados.")
 	@GetMapping("/estoque/{min}/{max}")
-	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloEstoque(@PathVariable int min, @PathVariable int max) {
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloEstoque(@PathVariable int min,
+			@PathVariable int max) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloEstoque(min, max);
 		if (produtosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(produtosDto);
 	}
-	
+
+	@Operation(summary = "Buscar produtos por intervalo de preço", description = "Busca produtos cujo preço esteja entre os valores mínimo e máximo especificados.")
 	@GetMapping("/preco/{valor_min}/{valor_max}")
-	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloValor(@PathVariable int valor_min, @PathVariable int valor_max) {
+	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloValor(@PathVariable int valor_min,
+			@PathVariable int valor_max) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloValor(valor_min, valor_max);
 		if (produtosDto.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.ok(produtosDto);
 	}
-	
+
+	@Operation(summary = "Buscar produtos por categoria", description = "Busca produtos com base no ID da categoria informada.")
 	@GetMapping("/categoria/{id_categoria}")
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorCategoria(@PathVariable Long id_categoria) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorCategoria(id_categoria);
@@ -111,10 +118,11 @@ public class ProdutoController {
 	}
 
 	@PutMapping("/{id_produto}")
-	@Operation(summary = "Altera um produto pelo id", description = "Dado um determinado número de id, é possivel alterar o produto e suas informações")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "404", description = "Não foi possivel alterar tal produto por esse id, por favor verifique!"),
-		@ApiResponse(responseCode = "200", description = "Produto alterado!") })
+	@Operation(summary = "Altera um produto pelo id", description = "Atualiza os dados de um produto existente, com base no ID fornecido.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto  alterado com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Produto não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<ProdutoDto> modificarProduto(@PathVariable Long id_produto,
 			@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
 		Optional<ProdutoDto> produtoAlterado = produtoServico.alterarProduto(id_produto, produtoCadastroDto);
@@ -125,10 +133,11 @@ public class ProdutoController {
 	}
 
 	@DeleteMapping("/{id_produto}")
-	@Operation(summary = "Deleta um produto pelo id", description = "Dado um determinado número de id, é possivel deletar o produto e suas informações")
-	@ApiResponses(value = {
-	@ApiResponse(responseCode = "404", description = "Não foi possivel deletar tal produto por esse id, por favor verifique!"),
-	@ApiResponse(responseCode = "200", description = "Produto deletado com sucesso!") })
+	@Operation(summary = "Remove um produto pelo ID", description = "Exclui um produto específico e suas informações, com base no ID informado.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto removido com sucesso!"),
+			@ApiResponse(responseCode = "404", description = "Produto não encontrado. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
 		if (!produtoServico.apagarProduto(id_produto)) {
 			return ResponseEntity.notFound().build();
@@ -136,7 +145,6 @@ public class ProdutoController {
 		return ResponseEntity.noContent().build();
 	}
 
-//ESTRUTURA DE POST E PUT
 //	{
 //	  "nome": "Capinha Iphone 15",
 //	  "descricao": "Uma capinha muito cara que faz o mesmo que todas as outras",
