@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 	title = "API Shablau",
 	version = "1.0",
 	description = "Documentação da API de Projeto Final"))
-public class OpenApiConfig {
-	
+public class OpenApiConfig {	
 
 }

@@ -49,10 +49,10 @@ public class PedidoController {
 	}
 	
     // REVER CODIGO
-	@Operation(summary = "Traz o relatorio", description = "Traz o Relatorio pelo id, do pedido")
-	@GetMapping("/relatorio/{idPedido}")
-	public String exibirRelatorio(@PathVariable Long idPedido) {
-		return pedidoServico.gerarRelatorio(idPedido);
+	@Operation(summary = "Traz o relatorio", description = "Traz o Relatorio pelo id do pedido")
+	@GetMapping("/relatorio/{id_pedido}")
+	public String exibirRelatorio(@PathVariable Long id_pedido) {
+		return pedidoServico.gerarHtmlRelatorio(id_pedido);
 	}
 
 //	@GetMapping("/relatorio/{idPedido}")
@@ -76,7 +76,7 @@ public class PedidoController {
 
 	@Operation(summary = "Buscar Pedido pelo seu status", description = "Busca o pedido de acordo com seu status")
 	@GetMapping("/pedido/{status}")
-	public List<PedidoDto> obterPorStatus(@PathVariable String status) {
+	public List<PedidoDto> buscarPedidoPorStatus(@PathVariable String status) {
 		return pedidoServico.obterPorStatus(StatusEnum.valueOf(status.toUpperCase()));
 	}
 
