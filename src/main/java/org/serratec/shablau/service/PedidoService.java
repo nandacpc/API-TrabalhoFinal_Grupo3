@@ -1,5 +1,6 @@
 package org.serratec.shablau.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,61 +30,65 @@ public class PedidoService {
 
 	@Autowired
 	private ProdutoService produtoService;
-	
+
 	@Autowired
 	private EmailService emailService;
 
 	// CREATE
 	public PedidoDto salvarPedido(PedidoCadastroDto pedidoCadastroDto) {
-		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente())
-				.orElseThrow(() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.idCliente()));
-				
+		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente()).orElseThrow(
+				() -> new RuntimeException("Cliente não encontrado. ID: " + pedidoCadastroDto.idCliente()));
+
 		Pedido novoPedido = new Pedido();
 		novoPedido.setDataPedido(pedidoCadastroDto.dataPedido());
 		novoPedido.setDataEnvio(pedidoCadastroDto.dataPedido().plusDays(3));
 		novoPedido.setDataEntrega(pedidoCadastroDto.dataPedido().plusDays(10));
 		novoPedido.setStatusPedido(pedidoCadastroDto.statusPedido());
 		novoPedido.setCliente(cliente.toEntity());
-		
+
 		List<ItemPedido> itensPedido = new ArrayList<>();
-		
+
 		for (ItemPedidoCadastroDto itemDto : pedidoCadastroDto.itens()) {
-	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
-	                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
-		
+			ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
+					.orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+
 			ItemPedido itemPedido = new ItemPedido();
 			itemPedido.setQuantidade(itemDto.quantidade());
 			itemPedido.setPercentual_desconto(itemDto.percentualDesconto());
 			itemPedido.setProduto(produto.toEntity());
 			itemPedido.setPrecoVenda(produto.valorUnitario());
 			itemPedido.setValorBruto(produto.valorUnitario() * itemPedido.getQuantidade());
-			itemPedido.setValor_liquido(itemPedido.getValorBruto() - (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto()/100));
+			itemPedido.setValor_liquido(itemPedido.getValorBruto()
+					- (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto() / 100));
 			itemPedido.setPedido(novoPedido);
-			
+
 			itensPedido.add(itemPedido);
-		}		
-		
-		double valorTotal = itensPedido.stream()
-		        .mapToDouble(i -> i.getValorLiquido())
-		        .sum();
+		}
+
+		double valorTotal = itensPedido.stream().mapToDouble(i -> i.getValorLiquido()).sum();
 		novoPedido.setValorTotal(valorTotal);
 
 		novoPedido.setItens(itensPedido);
-		
+
 		pedidoRepositorio.save(novoPedido);
+
 		String relatorio = gerarHtmlRelatorio(novoPedido.getIdPedido());
 		
+		String relatorio = gerarRelatorio(novoPedido.getIdPedido());
+
 		emailService.enviarEmail(cliente.email(), "Novo pedido gerado", relatorio);
-		
-		return PedidoDto.toDto(novoPedido);		
+
+		return PedidoDto.toDto(novoPedido);
 	}
-	
-	public String gerarRelatorio(Long idPedido) {
+
+	public String gerarRelatorio(Long idPedido) { 
 		List<ItemPedidoRelatorioDto> itensRelatorio = pedidoRepositorio.findItensByPedidoId(idPedido);
 		Pedido pedido = pedidoRepositorio.findById(idPedido).get();
-		PedidoRelatorioDto relatorio = new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(), pedido.getValorTotal(), itensRelatorio);
+		PedidoRelatorioDto relatorio = new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(),
+				pedido.getValorTotal(), itensRelatorio);
 		return relatorio.toString();
 	}
+
 	
 	public String gerarHtmlRelatorio(Long idPedido) {
 	    StringBuilder html = new StringBuilder();
@@ -130,63 +135,67 @@ public class PedidoService {
 		}
 		return Optional.of(PedidoDto.toDto(pedidoRepositorio.findById(id).get()));
 	}
-
-	// DERIVED QUERIES
-	public List<PedidoDto> obterPorStatus(StatusEnum status) {
+	public List<PedidoDto> obterPedidoPorStatus(StatusEnum status) {
 		List<Pedido> pedido = pedidoRepositorio.findByStatusPedido(status);
 		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
-
-// UPDATE
-	public Optional<PedidoDto> alterarDadosPedido(Long id_pedido, PedidoCadastroDto pedidoCadastroDto) {
-		if (!pedidoRepositorio.existsById(id_pedido)) {
+	public List<PedidoDto> obterPedidoPorDataPedido(LocalDate dataPedido) {
+		List<Pedido> pedido = pedidoRepositorio.findByDataPedido(dataPedido);
+		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
+	}
+	public List<PedidoDto> obterPedidoPorDataEntrega(LocalDate dataEntrega) {
+		List<Pedido> pedido = pedidoRepositorio.findByDataEntrega(dataEntrega);
+		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
+	}
+	public List<PedidoDto> obterPedidoPorDataEnvio(LocalDate dataEnvio) {
+		List<Pedido> pedido = pedidoRepositorio.findByDataEnvio(dataEnvio);
+		return pedido.stream().map(p -> PedidoDto.toDto(p)).toList();
+	}
+	
+	public Optional<PedidoDto> alterarDadosPedido(Long idPedido, PedidoCadastroDto pedidoCadastroDto) {
+		if (!pedidoRepositorio.existsById(idPedido)) {
 			return Optional.empty();
 		}
-		Pedido pedidoEntity = pedidoRepositorio.findById(id_pedido)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
+		Pedido pedidoEntity = pedidoRepositorio.findById(idPedido)
+				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 		ClienteDto cliente = clienteService.obterClientePorId(pedidoCadastroDto.idCliente())
 				.orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
-		
+
 		pedidoEntity.setDataPedido(pedidoCadastroDto.dataPedido());
 		pedidoEntity.setStatusPedido(pedidoCadastroDto.statusPedido());
 		pedidoEntity.setCliente(cliente.toEntity());
-		
+
 		List<ItemPedido> listaItens = new ArrayList<ItemPedido>();
 		for (ItemPedidoCadastroDto itemDto : pedidoCadastroDto.itens()) {
-	        ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
-	                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
-	        
+			ProdutoDto produto = produtoService.obterProdutoPorId(itemDto.idProduto())
+					.orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+
 			ItemPedido itemPedido = new ItemPedido();
 			itemPedido.setQuantidade(itemDto.quantidade());
 			itemPedido.setPercentual_desconto(itemDto.percentualDesconto());
 			itemPedido.setProduto(produto.toEntity());
 			itemPedido.setPrecoVenda(produto.valorUnitario());
 			itemPedido.setValorBruto(produto.valorUnitario() * itemPedido.getQuantidade());
-			itemPedido.setValor_liquido(itemPedido.getValorBruto() - (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto()/100));
+			itemPedido.setValor_liquido(itemPedido.getValorBruto()
+					- (itemPedido.getValorBruto() * itemPedido.getPercentualDesconto() / 100));
 			itemPedido.setPedido(pedidoEntity);
-			
 			listaItens.add(itemPedido);
-		}		
-		
+		}
 		pedidoEntity.setItens(listaItens);
-		double valorTotal = listaItens.stream()
-		        .mapToDouble(ItemPedido::getValorLiquido)
-		        .sum();
+		double valorTotal = listaItens.stream().mapToDouble(ItemPedido::getValorLiquido).sum();
 		pedidoEntity.setValorTotal(valorTotal);
-		
 		pedidoRepositorio.save(pedidoEntity);
 		return Optional.of(PedidoDto.toDto(pedidoEntity));
 	}
 
 	// DELETE
-	public boolean apagarPedido(Long id_pedido) {
-	    if (!pedidoRepositorio.existsById(id_pedido)) {
-	        throw new ResourceNotFoundException("Pedido com ID " + id_pedido + " não encontrado.");
-	    }
-	    pedidoRepositorio.deleteById(id_pedido);
-	    return true;
+	public boolean apagarPedido(Long idPedido) {
+		if (!pedidoRepositorio.existsById(idPedido)) {
+			throw new ResourceNotFoundException("Pedido com ID " + idPedido + " não encontrado.");
+		}
+		pedidoRepositorio.deleteById(idPedido);
+		return true;
 	}
-
 
 	// json cadastro pedido
 //	{

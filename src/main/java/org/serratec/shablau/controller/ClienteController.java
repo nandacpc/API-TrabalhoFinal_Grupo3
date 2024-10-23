@@ -31,7 +31,7 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteServico;
 
-	@Operation(summary = "Cadastra Clientes", description = "Coleta informação do cliente,cadastrado e salva")
+	@Operation(summary = "Cadastra Clientes", description = "Coleta informação do cliente, cadastra e salva")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto) throws Exception {
