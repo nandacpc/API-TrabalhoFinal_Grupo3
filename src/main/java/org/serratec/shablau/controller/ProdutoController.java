@@ -35,12 +35,18 @@ public class ProdutoController {
 	@PostMapping
 	@Operation(summary = "Cadastra um novo produto", description = "Recebe as informações do produto, realiza o cadastro no sistema e armazena os dados.")
 	@ResponseStatus(HttpStatus.CREATED)
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto cadastrado!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoCadastroDto produtoCadastroDto) {
 		return ResponseEntity.ok(produtoServico.salvarProduto(produtoCadastroDto));
 	}
 
 	@GetMapping
 	@Operation(summary = "Lista todos os produtos cadastrados", description = "Retorna uma lista com todos os produtos cadastrados no sistema.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produtos encontradas!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
 		List<ProdutoDto> produtosDto = produtoServico.obterTodosProdutos();
 		if (produtosDto.isEmpty()) {
@@ -66,6 +72,10 @@ public class ProdutoController {
 
 	@Operation(summary = "Buscar produtos pelo nome", description = "Busca produtos que correspondem ao nome informado.")
 	@GetMapping("/nome/{nome}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Nome encontrado!"),
+			@ApiResponse(responseCode = "404", description = "Nome não encontrado. Verifique a palavra utilizada ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorNome(@PathVariable String nome) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorNome(nome);
 		if (produtosDto.isEmpty()) {
@@ -76,6 +86,10 @@ public class ProdutoController {
 
 	@Operation(summary = "Buscar produtos por intervalo de datas", description = "Busca produtos com base na data de criação ou atualização entre as datas informadas.")
 	@GetMapping("/data/{data_inicio}/{data_final}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produtos por intervalo de data encontrados!"),
+			@ApiResponse(responseCode = "404", description = "Intervalo de data não encontrado. Verifique as datas utilizadas ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloData(@PathVariable LocalDate data_inicio,
 			@PathVariable LocalDate data_final) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloData(data_inicio, data_final);
@@ -87,6 +101,10 @@ public class ProdutoController {
 
 	@Operation(summary = "Buscar produtos por intervalo de quantidade em estoque", description = "Busca produtos cujo estoque esteja entre os valores mínimo e máximo especificados.")
 	@GetMapping("/estoque/{min}/{max}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produtos encontrados!"),
+			@ApiResponse(responseCode = "404", description = "Nenhum produto encontrado. Verifique o intervalo utilizado ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloEstoque(@PathVariable int min,
 			@PathVariable int max) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorIntervaloEstoque(min, max);
@@ -97,6 +115,10 @@ public class ProdutoController {
 	}
 
 	@Operation(summary = "Buscar produtos por intervalo de preço", description = "Busca produtos cujo preço esteja entre os valores mínimo e máximo especificados.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produtos encontrados!"),
+			@ApiResponse(responseCode = "404", description = "Produto não encontrado. Verifique o intervalo de preços utilizados utilizada ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	@GetMapping("/preco/{valor_min}/{valor_max}")
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorIntervaloValor(@PathVariable int valor_min,
 			@PathVariable int valor_max) {
@@ -108,6 +130,10 @@ public class ProdutoController {
 	}
 
 	@Operation(summary = "Buscar produtos por categoria", description = "Busca produtos com base no ID da categoria informada.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produtos encontrados!"),
+			@ApiResponse(responseCode = "404", description = "Produtos não encontrados. Verifique o ID da categoria utilizada ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	@GetMapping("/categoria/{id_categoria}")
 	public ResponseEntity<List<ProdutoDto>> buscarProdutoPorCategoria(@PathVariable Long id_categoria) {
 		List<ProdutoDto> produtosDto = produtoServico.obterProdutoPorCategoria(id_categoria);
@@ -119,7 +145,7 @@ public class ProdutoController {
 
 	@PutMapping("/{id_produto}")
 	@Operation(summary = "Altera um produto pelo id", description = "Atualiza os dados de um produto existente, com base no ID fornecido.")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto  alterado com sucesso!"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Produto alterado com sucesso!"),
 			@ApiResponse(responseCode = "404", description = "Produto não encontrado. Verifique o ID ou outros parâmetros informados."),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })

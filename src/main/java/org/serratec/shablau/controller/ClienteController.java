@@ -33,14 +33,20 @@ public class ClienteController {
 
 	@Operation(summary = "Cadastra um novo cliente", description = "Recebe as informações do cliente, realiza o cadastro no sistema e armazena os dados.")
 	@PostMapping
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Cliente cadastrado com sucesso!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ClienteDto> cadastrarCliente(@Valid @RequestBody ClienteCadastroDto clienteCadastroDto)
 			throws Exception {
 		return ResponseEntity.ok(clienteServico.salvarCliente(clienteCadastroDto));
 	}
-
+	
 	@Operation(summary = "Lista todos os clientes cadastrados", description = "Retorna uma lista com todos os clientes registrados no sistema.")
 	@GetMapping
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Clientes encontrados!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	public ResponseEntity<List<ClienteDto>> buscarTodosClientes() {
 		List<ClienteDto> clientesDto = clienteServico.obterTodosClientes();
 		if (clientesDto.isEmpty()) {
@@ -65,6 +71,10 @@ public class ClienteController {
 
 	@Operation(summary = "Consulta um cliente por nome", description = "Retorna um cliente de acordo com o nome registrado.")
 	@GetMapping("/{nome}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Nome encontrado!"),
+			@ApiResponse(responseCode = "404", description = "Nome não encontrado. Verifique o nome ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<ClienteDto>> buscarClientePorNome(@PathVariable String nome) {
 		List<ClienteDto> clientesDto = clienteServico.obterClientePorNome(nome);
 		if (!clientesDto.isEmpty()) {
@@ -75,6 +85,10 @@ public class ClienteController {
 
 	@Operation(summary = "Consulta um cliente por CPF", description = "Retorna um cliente de acordo com o CPF previamente registrado.")
 	@GetMapping("/{cpf}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "CPF encontrado!"),
+			@ApiResponse(responseCode = "404", description = "CPF não encontrado. Verifique o CPF ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<ClienteDto> buscarClientePorCpf(@PathVariable String cpf) {
 		Optional<ClienteDto> clienteDto = clienteServico.obterClientePorCpf(cpf);
 		if (!clienteDto.isPresent()) {

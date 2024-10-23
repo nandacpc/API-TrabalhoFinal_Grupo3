@@ -44,7 +44,6 @@ public class Produto {
 	@Column(name = "data_cadastro")
 	private LocalDate dataCadastro;
 
-	@Positive(message = "O valor unitário deve ser um número positivo.")
 	@Column(name = "valor_unitario")
 	private double valorUnitario;
 

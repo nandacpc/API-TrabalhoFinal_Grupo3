@@ -35,12 +35,18 @@ public class PedidoController {
 	@Operation(summary = "Cadastra um novo pedido", description = "Recebe as informações do pedido, realiza o cadastro no sistema e armazena os dados.")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedido cadastrado!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	public ResponseEntity<PedidoDto> cadastrarPedido(@Valid @RequestBody PedidoCadastroDto pedidoCadastroDto) {
 		return ResponseEntity.ok(pedidoServico.salvarPedido(pedidoCadastroDto));
 	}
 
 	@Operation(summary = "Lista todos os pedidos cadastrados", description = "Retorna uma lista com todos os pedidos registrados no sistema.")
 	@GetMapping
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedidos encontrados!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<PedidoDto>> buscarTodosPedidos() {
 		List<PedidoDto> pedidosDto = pedidoServico.obterTodosPedidos();
 		if (pedidosDto.isEmpty()) {
@@ -72,6 +78,10 @@ public class PedidoController {
 
 	@Operation(summary = "Consulta pedidos pelo status", description = "Busca e retorna uma lista de pedidos filtrados pelo status informado.")
 	@GetMapping("/status/{status}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Pedidos por Status identificados!"),
+			@ApiResponse(responseCode = "404", description = "Status não encontrado. Verifique o STATUS ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<PedidoDto>> buscarPedidoPorStatus(@PathVariable String status) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorStatus(StatusEnum.valueOf(status.toUpperCase()));
 		if (pedidosDto.isEmpty()) {
@@ -82,6 +92,10 @@ public class PedidoController {
 
 	@Operation(summary = "Consulta pedidos pela data de criação", description = "Retorna uma lista de pedidos feitos na data especificada.")
 	@GetMapping("/datas/pedidos/{dataPedido}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Datas de pedido coincidentes identificados!"),
+			@ApiResponse(responseCode = "404", description = "Não foram identificados pedidos nessa data. Verifique a data ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataPedido(@PathVariable LocalDate dataPedido) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataPedido(dataPedido);
 		if (pedidosDto.isEmpty()) {
@@ -92,6 +106,10 @@ public class PedidoController {
 
 	@Operation(summary = "Consulta pedidos pela data de entrega", description = "Busca pedidos que possuem a mesma data de entrega.")
 	@GetMapping("/datas/entrega/{dataEntrega}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Datas de entrega coincidentes identificados!"),
+			@ApiResponse(responseCode = "404", description = "Não foram identificados entregas nessa data. Verifique a data ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEntrega(@PathVariable LocalDate dataEntrega) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataEntrega(dataEntrega);
 		if (pedidosDto.isEmpty()) {
@@ -102,6 +120,10 @@ public class PedidoController {
 
 	@Operation(summary = "Consulta pedidos pela data de envio", description = "Retorna pedidos de acordo com a data em que foram enviados.")
 	@GetMapping("/datas/envio/{dataEnvio}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Datas de envio coincidentes identificados!"),
+			@ApiResponse(responseCode = "404", description = "Não foram identificados envios nessa data. Verifique a data ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<PedidoDto>> buscarPedidoPorDataEnvio(@PathVariable LocalDate dataEnvio) {
 		List<PedidoDto> pedidosDto = pedidoServico.obterPedidoPorDataEnvio(dataEnvio);
 		if (pedidosDto.isEmpty()) {

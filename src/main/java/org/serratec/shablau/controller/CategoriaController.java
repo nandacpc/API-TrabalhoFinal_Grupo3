@@ -31,6 +31,9 @@ public class CategoriaController {
 
 	@Operation(summary = "Cadastra uma nova categoria", description = "Recebe as informações de uma categoria, realiza o cadastro no sistema e armazena os dados.")
 	@PostMapping
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categoria cadastrada!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<CategoriaDto> cadastrarCategoria(@Valid @RequestBody CategoriaDto categoriaDto) {
 		return ResponseEntity.ok(categoriaServico.salvarCategoria(categoriaDto));
@@ -38,6 +41,9 @@ public class CategoriaController {
 
 	@Operation(summary = "Lista todas as categorias cadastradas", description = "Retorna uma lista com todas as categorias cadastradas.")
 	@GetMapping
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categorias encontradas!"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<CategoriaDto>> buscarTodasCategorias() {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterTodasCategorias();
 		if (categoriasDto.isEmpty()) {
@@ -47,7 +53,7 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{id_categoria}")
-	@Operation(summary = "Retorna uma categoria pelo id", description = "Dado um determinado número de id, será retornado uma categoria com suas informações gerais")
+	@Operation(summary = "Retorna uma categoria pelo id", description = "Dado um determinado número de ID, será retornado uma categoria com suas informações gerais")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Categoria encontrada!"),
 			@ApiResponse(responseCode = "404", description = "Categoria não encontrada. Verifique o ID ou outros parâmetros informados."),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
@@ -62,6 +68,11 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/descricao/{palavra}")
+	@Operation(summary = "Retorna uma categoria por palavra-chave", description = "Dado uma determinada palavra-chave, será retornada uma categoria que apresenta determinada palavra em sua descrição.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Palavra encontrada!"),
+			@ApiResponse(responseCode = "404", description = "Palavra não encontrada. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.") })
 	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
 		if (categoriasDto.isEmpty()) {
@@ -70,8 +81,12 @@ public class CategoriaController {
 		return ResponseEntity.ok(categoriasDto);
 	}
 
-	@Operation(summary = "Consulta categoria por nome", description = "Busca categoriaa pelo nome registrado.")
+	@Operation(summary = "Consulta categoria por nome", description = "Busca categoria pelo nome registrado.")
 	@GetMapping("/nome/{nome}")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Nome de categoria encontrada!"),
+			@ApiResponse(responseCode = "404", description = "Nome de categoria não encontrada. Verifique o ID ou outros parâmetros informados."),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida. Verifique se os parâmetros fornecidos estão corretos e no formato esperado."),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor. Tente novamente mais tarde.")})
 	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorNome(@PathVariable String nome) {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorNome(nome);
 		if (categoriasDto.isEmpty()) {
