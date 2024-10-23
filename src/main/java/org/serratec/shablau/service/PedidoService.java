@@ -70,14 +70,15 @@ public class PedidoService {
 		novoPedido.setItens(itensPedido);
 
 		pedidoRepositorio.save(novoPedido);
-		String relatorio = gerarRelatorio(novoPedido.getIdPedido());
 
-		emailService.enviarEmail(cliente.email(), "Novo pedido gerado", relatorio);
+		String relatorioHtml = gerarHtmlRelatorio(novoPedido.getIdPedido());
+
+		emailService.enviarEmail(cliente.email(), "Novo pedido gerado", relatorioHtml);
 
 		return PedidoDto.toDto(novoPedido);
 	}
 
-	public String gerarRelatorio(Long idPedido) { // retornar string
+	public String gerarRelatorio(Long idPedido) { 
 		List<ItemPedidoRelatorioDto> itensRelatorio = pedidoRepositorio.findItensByPedidoId(idPedido);
 		Pedido pedido = pedidoRepositorio.findById(idPedido).get();
 		PedidoRelatorioDto relatorio = new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(),
@@ -85,6 +86,40 @@ public class PedidoService {
 		return relatorio.toString();
 	}
 
+	public String gerarHtmlRelatorio(Long idPedido) {
+	    StringBuilder html = new StringBuilder();
+	    List<ItemPedidoRelatorioDto> itensRelatorio = pedidoRepositorio.findItensByPedidoId(idPedido);
+		Pedido pedido = pedidoRepositorio.findById(idPedido).get();
+		PedidoRelatorioDto relatorio = new PedidoRelatorioDto(pedido.getIdPedido(), pedido.getDataPedido(), pedido.getValorTotal(), itensRelatorio);
+
+	    html.append("<html><head><title>Relatório de Pedido</title></head><body>");
+
+	    html.append("<h1>Relatório do Pedido</h1>");
+	    
+	    html.append("<p><strong>ID do Pedido:</strong> ").append(relatorio.idPedido()).append("</p>");
+	    html.append("<p><strong>Data do Pedido:</strong> ").append(relatorio.dataPedido()).append("</p>");
+	    html.append("<p><strong>Valor Total:</strong> R$ ").append(String.format("%.2f", relatorio.valorTotal())).append("</p>");
+	    
+	    html.append("<h2>Itens do Pedido</h2>");
+	    html.append("<table border='1' cellpadding='5' cellspacing='0'>");
+	    html.append("<tr><th>Produto</th><th>Quantidade</th><th>Preço Unitário</th><th>Desconto</th><th>Valor Total</th></tr>");
+	    
+	    for (ItemPedidoRelatorioDto item : relatorio.itens()) {
+	        html.append("<tr style='text-align:center;'>")
+	            .append("<td>").append(item.nomeProduto()).append("</td>")
+	            .append("<td>").append(item.quantidade()).append("</td>")
+	            .append("<td>R$ ").append(String.format("%.2f", item.valorUnitario())).append("</td>")
+	            .append("<td>").append((int)item.percentualDesconto()).append("%</td>")
+	            .append("<td>R$ ").append(String.format("%.2f", item.valorLiquido())).append("</td>")
+	            .append("</tr>");
+	    }
+	    
+	    html.append("</table>");
+	    html.append("</body></html>");
+
+	    return html.toString();
+	}
+	
 	public List<PedidoDto> obterTodosPedidos() {
 		return pedidoRepositorio.findAll().stream().map(p -> PedidoDto.toDto(p)).toList();
 	}
@@ -159,7 +194,7 @@ public class PedidoService {
 		pedidoRepositorio.deleteById(idPedido);
 		return true; 
 	}
-
+	
 	// json cadastro pedido
 //	{
 //		"dataPedido": "2024-10-19",

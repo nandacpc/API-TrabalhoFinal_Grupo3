@@ -6,7 +6,10 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "API Shablau", version = "1.0", description = "Documentação da API de Projeto Final"))
-public class OpenApiConfig {
+@OpenAPIDefinition(info = @Info(
+	title = "API Shablau",
+	version = "1.0",
+	description = "Documentação da API de Projeto Final"))
+public class OpenApiConfig {	
 
 }

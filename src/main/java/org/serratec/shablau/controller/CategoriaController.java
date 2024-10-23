@@ -60,7 +60,7 @@ public class CategoriaController {
 		}
 		return ResponseEntity.ok(categoriaDto.get());
 	}
-
+	
 	@GetMapping("/descricao/{palavra}")
 	public ResponseEntity<List<CategoriaDto>> buscarCategoriaPorDescricao(@PathVariable String palavra) {
 		List<CategoriaDto> categoriasDto = categoriaServico.obterCategoriaPorDescricao(palavra);
