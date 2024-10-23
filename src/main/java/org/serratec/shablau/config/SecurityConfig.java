@@ -36,17 +36,17 @@ public class SecurityConfig {
 //    }
 	
 	@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.GET, "/").permitAll()
-            .requestMatchers("/swagger-ui.html", "/swagger-ui/", "/v2/api-docs", "/webjars/","/swagger-resources/").permitAll()
-            .requestMatchers(HttpMethod.POST, "/pedidos","/clientes","/produtos","/itenspedidos").hasRole("ADM")
-            .requestMatchers(HttpMethod.DELETE, "/pedidos/","/clientes/","/produtos/","/itenspedidos/").hasRole("ADM")
-            .requestMatchers(HttpMethod.PUT, "/pedidos/","/clientes/","/produtos/","/itenspedidos/").hasRole("ADM")
-            .requestMatchers(HttpMethod.PATCH, "/pedidos/","/clientes/","/produtos/","/itenspedidos/").hasRole("ADM"))
-            .csrf(csrf -> csrf.disable())
-            .httpBasic(Customizer.withDefaults());
-        return http.build();
+   	 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	        http.authorizeHttpRequests(authorize -> authorize
+	            .requestMatchers(HttpMethod.GET, "/**").permitAll()
+	            .requestMatchers("/swagger-ui.html", "/swagger-ui/", "/v2/api-docs", "/webjars/","/swagger-resources/").permitAll()
+	            .requestMatchers(HttpMethod.POST, "/pedidos","/clientes","/produtos","/itenspedidos").hasRole("ADM")
+	            .requestMatchers(HttpMethod.DELETE, "/pedidos/**","/clientes/**","/produtos/**","/itenspedidos/**").hasRole("ADM")
+	            .requestMatchers(HttpMethod.PUT, "/pedidos/**","/clientes/**","/produtos/**","/itenspedidos/**").hasRole("ADM")
+	            .requestMatchers(HttpMethod.PATCH, "/pedidos/**","/clientes/**","/produtos/**","/itenspedidos/**").hasRole("ADM"))
+	            .csrf(csrf -> csrf.disable())
+	            .httpBasic(Customizer.withDefaults());
+	        return http.build();
     }
 	
 	@Bean
