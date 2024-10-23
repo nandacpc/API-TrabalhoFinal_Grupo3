@@ -1,4 +1,7 @@
 # E-commerce API - SHABLAU✨ Capinhas e Acessórios de Celular 
+<div align="center">
+    <img src="https://i.imgur.com/9DiV2Nx.png" alt="SHABLAU" />
+</div>
 
 ## Lojinha de Acessórios
 
