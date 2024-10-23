@@ -1,9 +1,11 @@
 package org.serratec.shablau.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
@@ -11,19 +13,20 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender sender;
 	
-	public String enviarEmail(String destinatario, String assunto, String mensagem) {
-		SimpleMailMessage enviaMensagem = new SimpleMailMessage();
-		
-		enviaMensagem.setFrom("nandacpc@gmail.com");
-		enviaMensagem.setTo(destinatario);
-		enviaMensagem.setSubject(assunto);
-		enviaMensagem.setText(mensagem);
-		
-		try {
-			sender.send(enviaMensagem);			
-			return "E-mail enviado com sucesso.";			
-		} catch (Exception e) {
-			return "Erro ao enviar e-mail. Verifique.";
-		}
+	public String enviarEmail(String destinatario, String assunto, String mensagemHtml) {
+	    try {
+	        MimeMessage mimeMessage = sender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+	        helper.setText(mensagemHtml, true);
+	        helper.setTo(destinatario);
+	        helper.setSubject(assunto);
+	        helper.setFrom("nandacpc@gmail.com");
+
+	        sender.send(mimeMessage);
+	        return "E-mail enviado com sucesso.";
+	    } catch (Exception e) {
+	        return "Erro ao enviar e-mail. Verifique.";
+	    }
 	}
 }
